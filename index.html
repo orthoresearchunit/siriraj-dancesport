@@ -1,0 +1,1149 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>โปรแกรมคะแนนลีลาศกีฬาสีศิริราช V23</title>
+  <style>
+    :root{
+      --bg:#f3f5fa;--card:#fff;--ink:#1c2940;--muted:#66738b;--line:#dce3ef;
+      --primary:#3157d5;--primary-dark:#2446b5;--danger:#bf3030;--ok:#16784b;
+      --warn:#9a5a00;--soft:#eef2ff;--shadow:0 8px 28px rgba(37,52,82,.08)
+    }
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Tahoma,"Noto Sans Thai",Arial,sans-serif}
+    button,input,select{font:inherit}button{cursor:pointer}main{max-width:1500px;margin:auto;padding:20px}
+    header{background:linear-gradient(125deg,#253f99,#5574e6);color:#fff;border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+    header h1{margin:0 0 5px;font-size:clamp(23px,3vw,32px)}header p{margin:0;opacity:.92}
+    h2,h3{margin:0}h2{font-size:20px}h3{font-size:17px}.hidden{display:none!important}
+    .tabs,.actions,.button-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.tabs{margin:17px 0}.actions{margin:14px 0}
+    .tab,.btn{border:1px solid #cfd8e8;border-radius:9px;background:#fff;color:var(--ink);padding:9px 13px;font-weight:700}
+    .tab.active,.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}.btn.primary:hover{background:var(--primary-dark)}
+    .btn.danger{color:var(--danger);border-color:#efb9b9}.btn.success{background:var(--ok);color:#fff;border-color:var(--ok)}
+    .btn.warning{background:#9b6200;color:#fff;border-color:#9b6200}.btn.small{padding:5px 8px;font-size:13px}.btn:disabled{opacity:.42;cursor:not-allowed}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px;margin:15px 0;box-shadow:var(--shadow)}
+    .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .field{display:flex;flex-direction:column;gap:5px}.field label{font-weight:700}.hint{color:var(--muted);font-size:13px}.notice{background:#fff7e6;border-left:4px solid #d68b00;border-radius:9px;padding:11px 13px;margin:10px 0}
+    input,select{width:100%;min-width:0;border:1px solid #cbd5e5;border-radius:8px;padding:8px 10px;background:#fff;color:var(--ink)}
+    input:focus,select:focus{outline:3px solid rgba(49,87,213,.14);border-color:var(--primary)}input[type=color]{height:40px;padding:3px}
+    input[type=checkbox]{width:19px;height:19px;accent-color:var(--primary)}.invalid{border-color:var(--danger)!important;background:#fff3f3!important}
+    .scroll{overflow:auto;border:1px solid var(--line);border-radius:10px}table{width:100%;border-collapse:collapse;background:#fff}
+    th,td{border-bottom:1px solid var(--line);padding:9px;text-align:left;vertical-align:middle;white-space:nowrap}th{background:#f5f7fc;color:#34425a;font-size:14px}tr:last-child td{border-bottom:0}
+    .center{text-align:center}.right{text-align:right}.name-cell{white-space:normal;min-width:230px}.pill{display:inline-flex;align-items:center;gap:5px;background:var(--soft);color:#2948aa;border-radius:999px;padding:4px 9px;font-weight:700;font-size:13px;margin:2px}
+    .pill.ok{background:#e9f7ef;color:var(--ok)}.pill.warn{background:#fff1d6;color:var(--warn)}.pill.error{background:#fff0f0;color:var(--danger)}
+    .error-text{color:var(--danger);font-weight:700}.ok-text{color:var(--ok);font-weight:700}.warn-text{color:var(--warn);font-weight:700}
+    .registration-card{border:1px solid #d7deeb;border-radius:14px;margin:14px 0;background:#fbfcff;overflow:hidden}
+    .registration-head{display:grid;grid-template-columns:145px 180px minmax(240px,1fr) auto;gap:10px;align-items:end;padding:14px;background:#f1f4fb;border-bottom:1px solid #d7deeb}
+    .entry-list{padding:12px}.entry-row{display:grid;grid-template-columns:150px minmax(210px,1fr) minmax(280px,1.5fr) minmax(170px,.8fr) auto;gap:10px;align-items:start;padding:12px;border:1px solid #e0e6f0;border-radius:11px;background:#fff;margin-bottom:10px}
+    .entry-status{white-space:normal}.dance-picker summary{list-style:none}.dance-picker summary::-webkit-details-marker{display:none}.dance-panel{padding:12px;margin-top:7px;border:1px solid #d5ddec;border-radius:10px;background:#f8faff;min-width:280px}
+    .dance-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;max-height:300px;overflow:auto}.dance-choice{display:flex;align-items:center;gap:8px;white-space:normal;cursor:pointer}
+    .entry-actions{padding:0 12px 14px}.summary-cards{display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:10px}.summary-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:var(--shadow)}.summary-card strong{display:block;font-size:24px}
+    .round-tabs{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.round-tab{border:1px solid #ccd5e5;background:#fff;border-radius:999px;padding:7px 12px;font-weight:700}.round-tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+    .score-input{width:82px;text-align:center;font-weight:700;font-size:16px}.gold{color:#a97800;font-weight:700}.silver{color:#657181;font-weight:700}.bronze{color:#9b5d32;font-weight:700}
+    .rank-1 td{background:#fff9e6}.rank-2 td{background:#f7f8fb}.rank-3 td{background:#fff5ed}
+    .winner-grid{display:grid;grid-template-columns:1fr;gap:12px}.winner-card{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}.winner-card h3{margin-bottom:8px}
+    .empty{padding:22px;text-align:center;color:var(--muted)}#printArea{display:none}.report{font-family:Tahoma,"Noto Sans Thai",Arial,sans-serif;color:#000;background:#fff;font-size:11px}.report h1{text-align:center;margin:0 0 5px}.report .meta{text-align:center;margin-bottom:14px}.report h2{font-size:17px;margin:19px 0 7px;border-bottom:2px solid #000;padding-bottom:4px}.report h3{font-size:14px;margin:12px 0 5px}.report table{font-size:10px}.report th,.report td{border:1px solid #777;padding:5px;white-space:normal}.report section{break-inside:avoid;margin-bottom:18px}
+    @media(max-width:1050px){.registration-head,.entry-row{grid-template-columns:1fr 1fr}.entry-row .wide{grid-column:1/-1}.summary-cards{grid-template-columns:repeat(2,minmax(120px,1fr))}}
+    @media(max-width:650px){main{padding:10px}.grid,.grid-3,.registration-head,.entry-row{grid-template-columns:1fr}.summary-cards{grid-template-columns:1fr}.card{padding:13px}}
+    main.layout{max-width:1700px;display:block}
+    .topbar{color:var(--ink);border-radius:0;position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:-20px -20px 16px;padding:10px 20px;background:rgba(255,255,255,.97);border-bottom:1px solid var(--line);box-shadow:0 4px 18px rgba(37,52,82,.07)}
+    .top-brand{font-weight:700;font-size:17px;color:#253f99;white-space:nowrap}.top-brand small{margin-left:6px;font-weight:400;font-size:12px;color:var(--muted)}
+    .topbar .tabs{margin:0;gap:4px;flex-wrap:nowrap;overflow-x:auto;flex:1 1 auto;min-width:0}
+    .topbar .tab{display:flex;align-items:center;gap:8px;border-color:transparent;background:transparent;padding:8px 12px;min-height:44px;white-space:nowrap}
+    .topbar .tab:hover{background:var(--soft)}.topbar .tab.active{background:var(--primary);color:#fff}
+    .top-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .topbar .side-status{max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .menu-wrap{position:relative}
+    .menu-panel{position:absolute;right:0;top:calc(100% + 8px);width:320px;max-height:calc(100vh - 90px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 50px rgba(37,52,82,.2);padding:14px;display:flex;flex-direction:column;gap:14px}
+    .menu-sec{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}.menu-panel>.menu-sec:first-child,#cloudApp.hidden+.menu-sec{border-top:0;padding-top:0}
+    @media(max-width:1000px){.topbar{gap:8px}.topbar .tabs{order:3;flex-basis:100%}.topbar .side-status{max-width:170px}}
+    .content{min-width:0}.content>header{margin-bottom:4px}
+    .sidebar{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:16px}
+    .side-brand{font-weight:700;font-size:18px;color:#253f99;line-height:1.3}.side-brand small{display:block;font-weight:400;font-size:13px;color:var(--muted)}
+    .sidebar .tabs{flex-direction:column;align-items:stretch;margin:0;gap:6px}
+    .sidebar .tab{display:flex;align-items:center;gap:10px;text-align:left;border-color:transparent;background:transparent;padding:10px 11px;min-height:44px}
+    .sidebar .tab:hover{background:var(--soft)}.sidebar .tab.active{background:var(--primary);color:#fff}
+    .tab-no{flex:none;display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--soft);color:var(--primary);font-size:13px}.tab.active .tab-no{background:#fff;color:var(--primary)}
+    .side-section{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:8px}.sidebar .actions{margin:0;align-items:stretch}
+    .side-label{font-size:12px;font-weight:700;color:var(--muted)}
+    .side-status{font-size:13px;font-weight:700;border-radius:9px;padding:7px 9px;background:#f1f4fb;color:var(--muted)}.side-status.ok{background:#e9f7ef;color:var(--ok)}.side-status.warn{background:#fff1d6;color:var(--warn)}.side-status.error{background:#fff0f0;color:var(--danger)}
+    @media(max-width:900px){main.layout{grid-template-columns:1fr}.sidebar{position:static;max-height:none;padding:12px;gap:10px}.sidebar .tabs{flex-direction:row;flex-wrap:nowrap;overflow-x:auto}.sidebar .tab{flex:none}.sidebar .actions{flex-direction:row;flex-wrap:wrap;align-items:center}.sidebar .actions .side-label{flex-basis:100%}#cloudLogin{display:grid;grid-template-columns:1fr 1fr auto}}
+    .side-form{display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:8px}.side-form input,.side-form select{font-size:16px}
+    .side-mc{background:#f5f7fc;border:1px solid var(--line);border-radius:10px;padding:9px;font-size:13px;display:flex;flex-direction:column;gap:7px}.side-mc .button-row .btn{flex:1;text-align:center;text-decoration:none}
+    #gateBg{position:fixed;inset:0;z-index:0;display:none;overflow:hidden;background:linear-gradient(180deg,#bfdbfe 0%,#e0efff 45%,#f5f9ff 75%,#fdf2f8 100%)}body.gate-open #gateBg{display:block}
+    .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.75;filter:blur(2px);animation:cloud 60s linear infinite}
+    .cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%}
+    .cloud.c1{width:220px;height:60px;top:9%;left:-240px}.cloud.c1::before{width:100px;height:100px;left:40px;top:-50px}.cloud.c1::after{width:70px;height:70px;left:120px;top:-30px}
+    .cloud.c2{width:160px;height:46px;top:22%;left:-200px;animation-duration:80s;animation-delay:-35s;opacity:.6}.cloud.c2::before{width:70px;height:70px;left:30px;top:-36px}.cloud.c2::after{width:52px;height:52px;left:86px;top:-22px}
+    .cloud.c3{width:260px;height:70px;top:4%;left:-300px;animation-duration:95s;animation-delay:-70s;opacity:.55}.cloud.c3::before{width:120px;height:120px;left:50px;top:-60px}.cloud.c3::after{width:80px;height:80px;left:150px;top:-36px}
+    @keyframes cloud{to{transform:translateX(calc(100vw + 600px))}}
+    .garden{position:absolute;left:0;bottom:0;width:100%;height:100%}
+    .sway{transform-box:fill-box;transform-origin:50% 100%;animation:sway 5s ease-in-out infinite alternate}
+    @keyframes sway{from{transform:rotate(-2.5deg)}to{transform:rotate(2.5deg)}}
+    .bfly{position:absolute;left:0;top:0;filter:drop-shadow(0 6px 6px rgba(30,64,175,.18))}
+    .bfly svg{display:block;width:100%;height:auto;overflow:visible}
+    .bfly .wl,.bfly .wr{transform-box:view-box;transform-origin:50% 50%;animation:flap .22s ease-in-out infinite alternate}
+    @keyframes flap{to{transform:scaleX(.2)}}
+    .bfly.f1{animation:fly1 26s linear infinite}.bfly.f2{animation:fly2 31s linear infinite;animation-delay:-9s}
+    .bfly.f3{animation:fly3 23s linear infinite;animation-delay:-15s}.bfly.f4{animation:fly1 34s linear infinite reverse;animation-delay:-20s}
+    .bfly.f2 .wl,.bfly.f2 .wr{animation-duration:.18s}.bfly.f3 .wl,.bfly.f3 .wr{animation-duration:.16s}
+    @keyframes fly1{0%{transform:translate(-8vw,72vh) rotate(70deg)}20%{transform:translate(18vw,48vh) rotate(55deg)}40%{transform:translate(40vw,62vh) rotate(100deg)}60%{transform:translate(62vw,30vh) rotate(60deg)}80%{transform:translate(84vw,44vh) rotate(95deg)}100%{transform:translate(108vw,20vh) rotate(70deg)}}
+    @keyframes fly2{0%{transform:translate(105vw,60vh) rotate(-70deg)}25%{transform:translate(76vw,78vh) rotate(-110deg)}50%{transform:translate(50vw,40vh) rotate(-60deg)}75%{transform:translate(22vw,58vh) rotate(-95deg)}100%{transform:translate(-8vw,30vh) rotate(-70deg)}}
+    @keyframes fly3{0%{transform:translate(20vw,105vh) rotate(10deg)}30%{transform:translate(34vw,70vh) rotate(-20deg)}55%{transform:translate(12vw,40vh) rotate(15deg)}80%{transform:translate(30vw,12vh) rotate(-10deg)}100%{transform:translate(46vw,-10vh) rotate(5deg)}}
+    @media(prefers-reduced-motion:reduce){#gateBg *{animation:none!important}.bfly{display:none}}
+    .gate{position:fixed;inset:0;z-index:50;overflow:auto;display:grid;grid-template-columns:minmax(0,500px);justify-content:center;justify-items:stretch;gap:18px;align-content:center;padding:clamp(16px,4vh,40px) 18px;font-family:"Prompt",Tahoma,"Noto Sans Thai",sans-serif}
+    body.gate-open main{display:none}body:not(.gate-open) .gate{display:none}
+    .gate-hero{color:#1e3a8a;text-align:center;background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.8);border-radius:28px;padding:clamp(16px,2.6vh,26px) 24px clamp(18px,2.8vh,28px);box-shadow:0 18px 50px rgba(30,64,175,.12)}
+    .gate-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:999px;background:#fff;border:2px solid #bfdbfe;color:#1d4ed8;font-size:17px;font-weight:700;box-shadow:0 6px 16px rgba(37,99,235,.12)}
+    .gate-title{margin:10px 0 4px;font-weight:800;font-size:clamp(68px,12vh,112px);line-height:1;letter-spacing:-.01em;color:#1e3a8a;text-shadow:0 4px 0 #fff,0 10px 26px rgba(37,99,235,.25);padding-bottom:.08em}
+    .gate-sub{font-size:clamp(18px,2.4vh,22px);line-height:1.45;font-weight:600;color:#1e293b;margin:0;text-shadow:0 2px 0 rgba(255,255,255,.7)}
+    .gate-dots{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:center}.gate-dots span{width:20px;height:20px;border-radius:50%;box-shadow:0 0 0 3px #fff,0 4px 10px rgba(30,64,175,.2)}
+    .gate-card{width:100%;background:#fff;border-radius:26px;padding:clamp(22px,3.4vh,32px) 30px 22px;box-shadow:0 24px 70px rgba(30,64,175,.2);border:1px solid #dbeafe;display:flex;flex-direction:column;gap:18px;color:#0f172a}
+    .gate-card h2{font-size:28px;font-weight:800;margin:0 0 4px;color:#1e3a8a}.gate-card .lead{color:#475569;margin:0 0 18px;font-size:15px}
+    .gate-card .field{margin-bottom:14px}.gate-card label{font-weight:700;font-size:15px;color:#1e293b}
+    .gate-card input{font-size:17px;padding:13px 14px;border-radius:12px;border:1.5px solid #cbd8ee;background:#f8fbff;font-family:inherit}
+    .gate-card input:focus{outline:4px solid rgba(37,99,235,.15);border-color:#2563eb;background:#fff}
+    .gate-btn{width:100%;min-height:52px;font-size:17px;margin-top:6px;border-radius:14px;font-family:inherit}
+    .gate .btn.primary{background:linear-gradient(100deg,#3b82f6,#1d4ed8);border:0;font-size:18px;box-shadow:0 10px 24px rgba(37,99,235,.35);transition:transform .15s,box-shadow .15s}
+    .gate .btn.primary:hover{transform:translateY(-1px);box-shadow:0 14px 30px rgba(37,99,235,.45)}
+    .gate-msg{min-height:22px;margin-top:10px;color:#d6245e;font-weight:600;font-size:14px}
+    .gate-list{display:flex;flex-direction:column;gap:10px;margin:8px 0 12px;max-height:46vh;overflow:auto}
+    .gate-event{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;border:1.5px solid #e6e3f0;border-radius:14px;background:#fff;padding:14px 16px;min-height:52px;font-family:inherit}
+    .gate-event:hover{border-color:#2563eb;background:#f0f6ff}.gate-event b{font-size:17px;color:#1e3a8a}.gate-event span{font-size:13px;color:#475569}
+    @media(max-width:600px){.gate{grid-template-columns:minmax(0,1fr);align-content:start;gap:16px}.gate-title{font-size:clamp(60px,18vw,88px)}.gate-card{padding:24px 20px 18px}}
+    .gate-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid #e2e8f0;padding-top:14px;font-size:13px}.gate-foot a{color:var(--muted)}
+    .cloud-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.cloud-bar .field{min-width:180px;flex:1}.cloud-bar .btn{white-space:nowrap}
+    .mc-link{font-family:Consolas,monospace;font-size:13px;background:#f5f7fc;border:1px dashed #b9c4d8;border-radius:8px;padding:7px 9px;word-break:break-all}
+    body.mc-mode{background:#eef3fb}body.mc-mode main{display:none!important}
+    #mcView{min-height:100vh;display:flex;flex-direction:column;color:#1c2940}
+    .mc-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#1e40af;color:#fff;padding:12px clamp(14px,3vw,32px);border-bottom:4px solid #93c5fd}
+    .mc-bar b{font-size:18px}.mc-live{font-size:14px;opacity:.92}.mc-live::before{content:"●";color:#7ee2a0;margin-right:6px}.mc-live.err::before{color:#ff9a9a}
+    .mc-main{flex:1;display:flex;flex-direction:column;gap:18px;padding:clamp(18px,3vw,36px);max-width:1100px;width:100%;margin:0 auto}
+    .mc-count{font-size:18px;font-weight:700;color:#5b6b88}
+    .mc-title{margin:0;font-size:clamp(40px,7vw,72px);line-height:1.08;color:#1e40af}
+    .mc-list{display:flex;flex-direction:column;gap:14px}
+    .mc-item{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:clamp(12px,2vw,24px);align-items:center;background:#fff;border-radius:18px;padding:clamp(14px,2vw,22px);border-left:12px solid var(--c);box-shadow:0 4px 18px rgba(80,40,20,.08)}
+    .mc-medal-big{font-size:clamp(44px,6vw,64px);line-height:1}
+    .mc-num{font-size:clamp(34px,5vw,54px);font-weight:700;min-width:2.1em;text-align:center;background:#e3ebf8;border-radius:14px;padding:2px 10px}
+    .mc-who{font-size:clamp(22px,3vw,34px);font-weight:700;line-height:1.25}.mc-who small{display:block;margin-top:4px;font-size:.6em;color:#475569}
+    .mc-tag{display:inline-block;border-radius:999px;padding:1px 12px;margin-right:8px;background:var(--c);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+    .mc-wait{background:#fff;border-radius:18px;padding:48px 20px;text-align:center;font-size:clamp(30px,4.5vw,44px);font-weight:700;color:#5b6b88}.mc-wait small{display:block;margin-top:10px;font-size:.45em;font-weight:400}
+    .mc-nav{position:sticky;bottom:0;display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;max-width:1100px;width:100%;margin:0 auto;padding:14px clamp(18px,3vw,36px) 20px;background:linear-gradient(rgba(238,243,251,0),#eef3fb 28%)}
+    .mc-btn{min-height:64px;border-radius:16px;border:2px solid #1e40af;background:#fff;color:#1e40af;font-size:clamp(18px,2.4vw,22px);font-weight:700}.mc-btn.next{background:#1e40af;color:#fff}.mc-btn:disabled{opacity:.25;cursor:default}
+    .mc-dots{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:40vw}.mc-dot{width:13px;height:13px;border-radius:50%;background:#cbd6ea}.mc-dot.done{background:#c9a24a}.mc-dot.on{background:#1e40af;outline:3px solid rgba(30,64,175,.2)}
+    .mc-table{width:100%;background:#fff;border-radius:18px;overflow:hidden;font-size:clamp(20px,2.8vw,30px);box-shadow:0 4px 18px rgba(80,40,20,.08)}.mc-table th{background:#e3ebf8;font-size:.7em}.mc-table th,.mc-table td{padding:12px 18px;white-space:nowrap}.mc-table .n{text-align:center;font-weight:700}
+    .mc-sw{display:inline-block;width:24px;height:24px;border-radius:50%;margin-right:12px;vertical-align:-4px}
+    .mc-code{display:flex;gap:10px;flex-wrap:wrap;max-width:520px;margin:40px auto;background:#fff;color:#1c2940;border-radius:16px;padding:20px;box-shadow:0 4px 18px rgba(80,40,20,.1)}.mc-code input{font-size:20px;text-transform:uppercase}
+    @media(max-width:600px){.mc-item{grid-template-columns:auto minmax(0,1fr)}.mc-item .mc-who{grid-column:1/-1}.mc-nav{grid-template-columns:1fr 1fr}.mc-dots{grid-column:1/-1;grid-row:1;max-width:none}}
+    @media print{@page{size:A4 landscape;margin:9mm}main{display:none!important}#printArea{display:block!important}.report{font-size:9px}}
+  </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="gate-open">
+<div id="gateBg" aria-hidden="true">
+  <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+  <svg class="garden" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <symbol id="flw" viewBox="-40 -40 80 80" width="80" height="80" x="-40" y="-40" overflow="visible">
+      <g fill="currentColor" stroke="rgba(0,0,0,.06)" stroke-width="1"><ellipse cx="0" cy="-17" rx="12" ry="18" transform="rotate(0)"/><ellipse cx="0" cy="-17" rx="12" ry="18" transform="rotate(72)"/><ellipse cx="0" cy="-17" rx="12" ry="18" transform="rotate(144)"/><ellipse cx="0" cy="-17" rx="12" ry="18" transform="rotate(216)"/><ellipse cx="0" cy="-17" rx="12" ry="18" transform="rotate(288)"/></g>
+      <g fill="#fff" opacity=".35"><ellipse cx="0" cy="-20" rx="4" ry="9" transform="rotate(0)"/><ellipse cx="0" cy="-20" rx="4" ry="9" transform="rotate(72)"/><ellipse cx="0" cy="-20" rx="4" ry="9" transform="rotate(144)"/><ellipse cx="0" cy="-20" rx="4" ry="9" transform="rotate(216)"/><ellipse cx="0" cy="-20" rx="4" ry="9" transform="rotate(288)"/></g>
+      <circle r="8" fill="#fbbf24"/><circle r="4" fill="#f59e0b"/>
+    </symbol>
+  </defs>
+  <path d="M0 860 C 180 800, 360 830, 520 860 S 860 880, 1040 850 S 1400 800, 1600 850 V900 H0Z" fill="#c9f2d4"/>
+  <g class="sway" style="animation-delay:-3.5s"><path d="M154 900 Q154.21955564574358 801.4762743952446 154 702" stroke="#3f9d5a" stroke-width="5.6" fill="none" stroke-linecap="round"/><ellipse cx="174" cy="801" rx="22" ry="10" fill="#5cc27a" transform="rotate(-35 174 801)"/><use href="#flw" color="#c4b5fd" transform="translate(154 702) scale(1.40) rotate(28)"/></g><g class="sway" style="animation-delay:-1.8s"><path d="M65 900 Q53.63545677441812 804.8985323085109 58 709" stroke="#3f9d5a" stroke-width="4.8" fill="none" stroke-linecap="round"/><ellipse cx="77" cy="804" rx="19" ry="8" fill="#5cc27a" transform="rotate(-35 77 804)"/><use href="#flw" color="#fde68a" transform="translate(58 709) scale(1.21) rotate(11)"/></g><g class="sway" style="animation-delay:-5.8s"><path d="M34 900 Q47.50141578236579 783.6104157927468 42 667" stroke="#3f9d5a" stroke-width="5.0" fill="none" stroke-linecap="round"/><ellipse cx="57" cy="784" rx="20" ry="9" fill="#5cc27a" transform="rotate(-35 57 784)"/><use href="#flw" color="#f9a8d4" transform="translate(42 667) scale(1.25) rotate(38)"/></g><g class="sway" style="animation-delay:-0.4s"><path d="M220 900 Q220.7946754527734 797.4872666226322 220 694" stroke="#3f9d5a" stroke-width="3.6" fill="none" stroke-linecap="round"/><ellipse cx="233" cy="797" rx="14" ry="6" fill="#5cc27a" transform="rotate(-35 233 797)"/><use href="#flw" color="#f9a8d4" transform="translate(220 694) scale(0.90) rotate(53)"/></g><g class="sway" style="animation-delay:-5.1s"><path d="M67 900 Q65.33487126638639 824.2010745229371 66 748" stroke="#3f9d5a" stroke-width="3.3" fill="none" stroke-linecap="round"/><ellipse cx="78" cy="824" rx="13" ry="6" fill="#5cc27a" transform="rotate(-35 78 824)"/><use href="#flw" color="#c4b5fd" transform="translate(66 748) scale(0.82) rotate(20)"/></g><g class="sway" style="animation-delay:-1.7s"><path d="M176 900 Q174.80523668478762 795.7191428837789 175 691" stroke="#3f9d5a" stroke-width="4.5" fill="none" stroke-linecap="round"/><ellipse cx="191" cy="796" rx="18" ry="8" fill="#5cc27a" transform="rotate(-35 191 796)"/><use href="#flw" color="#fda4af" transform="translate(175 691) scale(1.12) rotate(5)"/></g><g class="sway" style="animation-delay:-1.4s"><path d="M334 900 Q328.8277620764354 770.3080476215817 331 640" stroke="#3f9d5a" stroke-width="5.4" fill="none" stroke-linecap="round"/><ellipse cx="351" cy="770" rx="22" ry="9" fill="#5cc27a" transform="rotate(-35 351 770)"/><use href="#flw" color="#fda4af" transform="translate(331 640) scale(1.35) rotate(16)"/></g><g class="sway" style="animation-delay:-2.3s"><path d="M100 900 Q109.704341412673 836.4790197814652 106 772" stroke="#3f9d5a" stroke-width="5.2" fill="none" stroke-linecap="round"/><ellipse cx="122" cy="836" rx="21" ry="9" fill="#5cc27a" transform="rotate(-35 122 836)"/><use href="#flw" color="#c4b5fd" transform="translate(106 772) scale(1.30) rotate(6)"/></g><g class="sway" style="animation-delay:-2.8s"><path d="M321 900 Q332.4876139869171 780.9173512088495 328 661" stroke="#3f9d5a" stroke-width="3.2" fill="none" stroke-linecap="round"/><ellipse cx="337" cy="780" rx="13" ry="6" fill="#5cc27a" transform="rotate(-35 337 780)"/><use href="#flw" color="#fbcfe8" transform="translate(328 661) scale(0.80) rotate(59)"/></g><g class="sway" style="animation-delay:-1.6s"><path d="M328 900 Q335.7983040429462 813.0841562523315 333 726" stroke="#3f9d5a" stroke-width="3.4" fill="none" stroke-linecap="round"/><ellipse cx="343" cy="813" rx="14" ry="6" fill="#5cc27a" transform="rotate(-35 343 813)"/><use href="#flw" color="#fda4af" transform="translate(333 726) scale(0.85) rotate(12)"/></g><g class="sway" style="animation-delay:-1.5s"><path d="M33 900 Q22.303767023747422 817.7201277793706 27 735" stroke="#3f9d5a" stroke-width="5.7" fill="none" stroke-linecap="round"/><ellipse cx="49" cy="818" rx="23" ry="10" fill="#5cc27a" transform="rotate(-35 49 818)"/><use href="#flw" color="#fde68a" transform="translate(27 735) scale(1.43) rotate(59)"/></g><g class="sway" style="animation-delay:-2.7s"><path d="M1308 900 Q1309.660263965091 837.217621689713 1309 774" stroke="#3f9d5a" stroke-width="5.3" fill="none" stroke-linecap="round"/><ellipse cx="1327" cy="837" rx="21" ry="9" fill="#5cc27a" transform="rotate(-35 1327 837)"/><use href="#flw" color="#fbcfe8" transform="translate(1309 774) scale(1.32) rotate(43)"/></g><g class="sway" style="animation-delay:-2.5s"><path d="M1337 900 Q1326.2622236539119 789.169563576424 1331 678" stroke="#3f9d5a" stroke-width="3.5" fill="none" stroke-linecap="round"/><ellipse cx="1345" cy="789" rx="14" ry="6" fill="#5cc27a" transform="rotate(-35 1345 789)"/><use href="#flw" color="#fda4af" transform="translate(1331 678) scale(0.89) rotate(24)"/></g><g class="sway" style="animation-delay:-5.3s"><path d="M1345 900 Q1339.5160641963878 822.2096591308723 1342 744" stroke="#3f9d5a" stroke-width="5.7" fill="none" stroke-linecap="round"/><ellipse cx="1363" cy="822" rx="23" ry="10" fill="#5cc27a" transform="rotate(-35 1363 822)"/><use href="#flw" color="#fde68a" transform="translate(1342 744) scale(1.43) rotate(37)"/></g><g class="sway" style="animation-delay:-5.9s"><path d="M1344 900 Q1332.8093170611487 813.3093634493481 1337 726" stroke="#3f9d5a" stroke-width="5.4" fill="none" stroke-linecap="round"/><ellipse cx="1358" cy="813" rx="22" ry="9" fill="#5cc27a" transform="rotate(-35 1358 813)"/><use href="#flw" color="#fda4af" transform="translate(1337 726) scale(1.36) rotate(36)"/></g><g class="sway" style="animation-delay:-0.4s"><path d="M1345 900 Q1339.2970933527704 823.0331546128941 1342 746" stroke="#3f9d5a" stroke-width="5.2" fill="none" stroke-linecap="round"/><ellipse cx="1361" cy="823" rx="21" ry="9" fill="#5cc27a" transform="rotate(-35 1361 823)"/><use href="#flw" color="#ffffff" transform="translate(1342 746) scale(1.30) rotate(53)"/></g><g class="sway" style="animation-delay:-2.7s"><path d="M1304 900 Q1300.4077133046103 799.8344619310201 1302 699" stroke="#3f9d5a" stroke-width="3.8" fill="none" stroke-linecap="round"/><ellipse cx="1316" cy="800" rx="15" ry="7" fill="#5cc27a" transform="rotate(-35 1316 800)"/><use href="#flw" color="#93c5fd" transform="translate(1302 699) scale(0.96) rotate(23)"/></g><g class="sway" style="animation-delay:-0.9s"><path d="M1591 900 Q1582.1191760418033 806.913695871728 1586 713" stroke="#3f9d5a" stroke-width="4.7" fill="none" stroke-linecap="round"/><ellipse cx="1604" cy="806" rx="19" ry="8" fill="#5cc27a" transform="rotate(-35 1604 806)"/><use href="#flw" color="#fde68a" transform="translate(1586 713) scale(1.17) rotate(24)"/></g><g class="sway" style="animation-delay:-5.6s"><path d="M1574 900 Q1580.7038829148662 783.0271606136351 1578 666" stroke="#3f9d5a" stroke-width="3.8" fill="none" stroke-linecap="round"/><ellipse cx="1590" cy="783" rx="15" ry="7" fill="#5cc27a" transform="rotate(-35 1590 783)"/><use href="#flw" color="#fbcfe8" transform="translate(1578 666) scale(0.96) rotate(10)"/></g><g class="sway" style="animation-delay:-0.6s"><path d="M1339 900 Q1336.800802270526 773.5652865599318 1338 647" stroke="#3f9d5a" stroke-width="5.5" fill="none" stroke-linecap="round"/><ellipse cx="1357" cy="774" rx="22" ry="10" fill="#5cc27a" transform="rotate(-35 1357 774)"/><use href="#flw" color="#93c5fd" transform="translate(1338 647) scale(1.37) rotate(5)"/></g><g class="sway" style="animation-delay:-4.9s"><path d="M1287 900 Q1280.1954791529688 772.6682719309235 1283 645" stroke="#3f9d5a" stroke-width="3.8" fill="none" stroke-linecap="round"/><ellipse cx="1298" cy="772" rx="15" ry="7" fill="#5cc27a" transform="rotate(-35 1298 772)"/><use href="#flw" color="#fda4af" transform="translate(1283 645) scale(0.95) rotate(25)"/></g><g class="sway" style="animation-delay:-2.9s"><path d="M1471 900 Q1460.539204883539 820.5193727263413 1465 741" stroke="#3f9d5a" stroke-width="3.7" fill="none" stroke-linecap="round"/><ellipse cx="1480" cy="820" rx="15" ry="6" fill="#5cc27a" transform="rotate(-35 1480 820)"/><use href="#flw" color="#fda4af" transform="translate(1465 741) scale(0.91) rotate(4)"/></g><g class="sway" style="animation-delay:-4.5s"><path d="M879 900 Q890.6185411640362 852.6762716898918 886 805" stroke="#3f9d5a" stroke-width="2.3" fill="none" stroke-linecap="round"/><ellipse cx="892" cy="852" rx="9" ry="4" fill="#5cc27a" transform="rotate(-35 892 852)"/><use href="#flw" color="#fbcfe8" transform="translate(886 805) scale(0.57) rotate(58)"/></g><g class="sway" style="animation-delay:-3.2s"><path d="M575 900 Q568.8949327344149 859.4229234404245 571 818" stroke="#3f9d5a" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="581" cy="859" rx="10" ry="4" fill="#5cc27a" transform="rotate(-35 581 859)"/><use href="#flw" color="#f9a8d4" transform="translate(571 818) scale(0.62) rotate(11)"/></g><g class="sway" style="animation-delay:-4.1s"><path d="M1045 900 Q1049.394097302268 869.9576599229068 1048 839" stroke="#3f9d5a" stroke-width="2.4" fill="none" stroke-linecap="round"/><ellipse cx="1055" cy="870" rx="9" ry="4" fill="#5cc27a" transform="rotate(-35 1055 870)"/><use href="#flw" color="#c4b5fd" transform="translate(1048 839) scale(0.59) rotate(21)"/></g><g class="sway" style="animation-delay:-4.2s"><path d="M843 900 Q854.4859486669989 868.3685428241946 850 836" stroke="#3f9d5a" stroke-width="2.2" fill="none" stroke-linecap="round"/><ellipse cx="855" cy="868" rx="9" ry="4" fill="#5cc27a" transform="rotate(-35 855 868)"/><use href="#flw" color="#f9a8d4" transform="translate(850 836) scale(0.56) rotate(30)"/></g><g class="sway" style="animation-delay:-1.9s"><path d="M1040 900 Q1046.453943466468 872.2984471190996 1044 844" stroke="#3f9d5a" stroke-width="3.0" fill="none" stroke-linecap="round"/><ellipse cx="1053" cy="872" rx="12" ry="5" fill="#5cc27a" transform="rotate(-35 1053 872)"/><use href="#flw" color="#c4b5fd" transform="translate(1044 844) scale(0.74) rotate(4)"/></g><g class="sway" style="animation-delay:-4.4s"><path d="M1059 900 Q1070.2054846749827 870.5163242969513 1066 841" stroke="#3f9d5a" stroke-width="2.9" fill="none" stroke-linecap="round"/><ellipse cx="1073" cy="870" rx="11" ry="5" fill="#5cc27a" transform="rotate(-35 1073 870)"/><use href="#flw" color="#fda4af" transform="translate(1066 841) scale(0.71) rotate(2)"/></g><g class="sway" style="animation-delay:-5.4s"><path d="M905 900 Q910.1840867493436 846.822199688915 908 793" stroke="#3f9d5a" stroke-width="3.3" fill="none" stroke-linecap="round"/><ellipse cx="919" cy="846" rx="13" ry="6" fill="#5cc27a" transform="rotate(-35 919 846)"/><use href="#flw" color="#ffffff" transform="translate(908 793) scale(0.82) rotate(5)"/></g>
+  <path d="M0 885 C 200 860, 420 880, 640 890 S 1100 870, 1300 880 S 1500 870, 1600 880 V900 H0Z" fill="#a7e8b8"/>
+</svg>
+  <div class="bfly f1" style="width:58px"><svg viewBox="-50 -40 100 80"><g class="wl"><path d="M-2-4 C-30-38 -52-22 -42 0 C-38 8 -16 6 -2 0Z" fill="#60a5fa"/><path d="M-2 2 C-26 6 -38 26 -22 32 C-12 34 -4 18 -2 6Z" fill="#2563eb"/><circle cx="-30" cy="-14" r="4" fill="#fff" opacity=".7"/></g><g class="wr"><path d="M2-4 C30-38 52-22 42 0 C38 8 16 6 2 0Z" fill="#60a5fa"/><path d="M2 2 C26 6 38 26 22 32 C12 34 4 18 2 6Z" fill="#2563eb"/><circle cx="30" cy="-14" r="4" fill="#fff" opacity=".7"/></g><rect x="-2.5" y="-14" width="5" height="34" rx="2.5" fill="#1e293b"/><path d="M-1-14 Q-8-28 -12-30 M1-14 Q8-28 12-30" stroke="#1e293b" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div><div class="bfly f2" style="width:46px"><svg viewBox="-50 -40 100 80"><g class="wl"><path d="M-2-4 C-30-38 -52-22 -42 0 C-38 8 -16 6 -2 0Z" fill="#f472b6"/><path d="M-2 2 C-26 6 -38 26 -22 32 C-12 34 -4 18 -2 6Z" fill="#db2777"/><circle cx="-30" cy="-14" r="4" fill="#fff" opacity=".7"/></g><g class="wr"><path d="M2-4 C30-38 52-22 42 0 C38 8 16 6 2 0Z" fill="#f472b6"/><path d="M2 2 C26 6 38 26 22 32 C12 34 4 18 2 6Z" fill="#db2777"/><circle cx="30" cy="-14" r="4" fill="#fff" opacity=".7"/></g><rect x="-2.5" y="-14" width="5" height="34" rx="2.5" fill="#1e293b"/><path d="M-1-14 Q-8-28 -12-30 M1-14 Q8-28 12-30" stroke="#1e293b" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div><div class="bfly f3" style="width:40px"><svg viewBox="-50 -40 100 80"><g class="wl"><path d="M-2-4 C-30-38 -52-22 -42 0 C-38 8 -16 6 -2 0Z" fill="#fbbf24"/><path d="M-2 2 C-26 6 -38 26 -22 32 C-12 34 -4 18 -2 6Z" fill="#f97316"/><circle cx="-30" cy="-14" r="4" fill="#fff" opacity=".7"/></g><g class="wr"><path d="M2-4 C30-38 52-22 42 0 C38 8 16 6 2 0Z" fill="#fbbf24"/><path d="M2 2 C26 6 38 26 22 32 C12 34 4 18 2 6Z" fill="#f97316"/><circle cx="30" cy="-14" r="4" fill="#fff" opacity=".7"/></g><rect x="-2.5" y="-14" width="5" height="34" rx="2.5" fill="#1e293b"/><path d="M-1-14 Q-8-28 -12-30 M1-14 Q8-28 12-30" stroke="#1e293b" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div><div class="bfly f4" style="width:52px"><svg viewBox="-50 -40 100 80"><g class="wl"><path d="M-2-4 C-30-38 -52-22 -42 0 C-38 8 -16 6 -2 0Z" fill="#a78bfa"/><path d="M-2 2 C-26 6 -38 26 -22 32 C-12 34 -4 18 -2 6Z" fill="#7c3aed"/><circle cx="-30" cy="-14" r="4" fill="#fff" opacity=".7"/></g><g class="wr"><path d="M2-4 C30-38 52-22 42 0 C38 8 16 6 2 0Z" fill="#a78bfa"/><path d="M2 2 C26 6 38 26 22 32 C12 34 4 18 2 6Z" fill="#7c3aed"/><circle cx="30" cy="-14" r="4" fill="#fff" opacity=".7"/></g><rect x="-2.5" y="-14" width="5" height="34" rx="2.5" fill="#1e293b"/><path d="M-1-14 Q-8-28 -12-30 M1-14 Q8-28 12-30" stroke="#1e293b" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>
+</div>
+
+<section id="loginGate" class="gate">
+  <div class="gate-hero">
+    <span class="gate-pill">💃 กีฬาสีศิริราช</span>
+    <h1 class="gate-title">ลีลาศ</h1>
+    <p class="gate-sub">ระบบบันทึกคะแนนและประกาศผล<br>สำหรับ Staff และพิธีกร</p>
+    <div class="gate-dots" aria-label="7 สี"><span style="background:#d62828"></span><span style="background:#f26b21"></span><span style="background:#e3b522"></span><span style="background:#79b85a"></span><span style="background:#4ea8de"></span><span style="background:#3157d5"></span><span style="background:#8338ec"></span></div>
+  </div>
+  <div class="gate-card">
+    <div class="gate-brand hidden">💃 ลีลาศกีฬาสีศิริราช<small>โปรแกรมคำนวณคะแนน • สำหรับ Staff</small></div>
+    <div id="gateLogin">
+      <h2>เข้าสู่ระบบ</h2><p class="lead">ใช้อีเมลและรหัสผ่าน Staff ที่ได้รับ</p>
+      <div class="field"><label for="gateEmail">อีเมล</label><input id="gateEmail" type="email" autocomplete="username" inputmode="email"></div>
+      <div class="field"><label for="gatePassword">รหัสผ่าน</label><input id="gatePassword" type="password" autocomplete="current-password"></div>
+      <button class="btn primary gate-btn" id="gateLoginBtn">เข้าสู่ระบบ</button>
+      <div id="gateMsg" class="gate-msg"></div>
+    </div>
+    <div id="gateEvents" class="hidden">
+      <h2>เลือกรายการแข่งขัน</h2>
+      <div class="hint" id="gateUser"></div>
+      <div id="gateEventList" class="gate-list"></div>
+      <button class="btn gate-btn" id="gateNewBtn">+ สร้างรายการแข่งขันใหม่</button>
+    </div>
+    <div class="gate-foot"><a href="#" id="gateOffline">ไม่มีอินเทอร์เน็ต? ใช้งานในเครื่องนี้ชั่วคราว</a><a href="?mc=">📺 เปิดจอพิธีกร</a></div>
+  </div>
+</section>
+<main class="layout">
+<header class="topbar">
+  <div class="top-brand">💃 ลีลาศศิริราช<small>V23</small></div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="setup"><span class="tab-no">1</span>ตั้งค่าการแข่งขัน</button>
+    <button class="tab" data-tab="registration"><span class="tab-no">2</span>ลงชื่อและเลือกจังหวะ</button>
+    <button class="tab" data-tab="scoring"><span class="tab-no">3</span>ลงคะแนน</button>
+    <button class="tab" data-tab="results"><span class="tab-no">4</span>ผลและรายงาน</button>
+  </nav>
+  <div class="top-right">
+    <div id="cloudStatusMini" class="side-status">ยังไม่เข้าสู่ระบบ</div>
+    <div id="cloudLogin"><button class="btn primary small" id="openGateBtn">เข้าสู่ระบบ</button></div>
+    <div class="menu-wrap">
+      <button class="btn" id="menuBtn" aria-haspopup="true" aria-expanded="false">☰ เมนู</button>
+      <div id="menuPanel" class="menu-panel hidden">
+        <div id="cloudApp" class="side-form hidden">
+          <label class="side-label" for="cloudEventSelect">รายการแข่งขันที่ใช้อยู่</label>
+          <select id="cloudEventSelect"></select>
+          <div id="mcLinkBox"></div>
+        </div>
+        <div class="menu-sec">
+          <div class="side-label">จัดการข้อมูล</div>
+          <button class="btn" id="newEventBtn">+ สร้างรายการแข่งขันใหม่</button>
+          <button class="btn success" id="backupBtn">📊 สำรองข้อมูล Excel</button>
+          <button class="btn" id="restoreBtn">นำเข้าข้อมูลจาก Excel</button>
+          <input type="file" id="restoreFile" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+        </div>
+        <div class="menu-sec hidden" id="menuDanger"><button class="btn danger" id="deleteEventBtn">🗑 ลบรายการแข่งขันนี้</button></div>
+        <div class="menu-sec hidden" id="menuUser"><div class="hint" id="cloudUserEmail"></div><button class="btn small" id="cloudLogoutBtn">ออกจากระบบ</button></div>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="content">
+
+
+  <section id="setupPanel">
+    <div class="card">
+      <div class="card-head"><div><h2>ข้อมูลการแข่งขัน</h2><div class="hint">ข้อมูลบันทึกอัตโนมัติในเบราว์เซอร์เครื่องนี้</div></div><span class="pill ok">บันทึกอัตโนมัติ</span></div>
+      <div class="grid grid-3">
+        <div class="field"><label>ชื่อรายการ <span class="hint">(ใช้บนจอพิธีกร รายงาน และรายการออนไลน์)</span></label><input id="eventName"></div>
+        <div class="field"><label>วันที่แข่งขัน</label><input id="eventDate" type="date"></div>
+        <div class="field"><label>สถานที่</label><input id="eventLocation"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div><h2>กลุ่มสี 7 สี</h2><div class="hint">แก้ไขชื่อและเฉดสีได้ แต่จำนวนคงไว้ 7 สี</div></div><span class="pill">7 สี</span></div>
+      <div class="grid" id="colorRows"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div><h2>กรรมการ</h2><div class="hint">อย่างน้อย 3 ท่าน คะแนนเต็มท่านละ 20 คะแนน</div></div><button class="btn primary" id="addJudgeBtn">+ เพิ่มกรรมการ</button></div>
+      <div class="scroll"><table><thead><tr><th class="center">ลำดับ</th><th>ชื่อกรรมการ</th><th class="center">จัดการ</th></tr></thead><tbody id="judgeRows"></tbody></table></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div><h2>จังหวะและลำดับการแข่งขัน</h2><div class="hint">เพิ่มจังหวะได้ไม่จำกัด รวมถึงรายการ เช่น “Cha Cha Cha (Solo ญ)”</div></div><button class="btn primary" id="addDanceBtn">+ เพิ่มจังหวะ</button></div>
+      <div class="scroll"><table><thead><tr><th class="center">ลำดับ</th><th>ชื่อจังหวะ/รายการ</th><th class="center">เลื่อนลำดับและลบ</th></tr></thead><tbody id="danceRows"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="registrationPanel" class="hidden">
+    <div class="card">
+      <div class="card-head">
+        <div><h2>ลงชื่อคู่แข่งขันและเลือกจังหวะ</h2><div class="hint">หมายเลขแข่งขันใช้ 2 หลัก เริ่มต้น 01 หนึ่งหมายเลขเพิ่มคู่หญิงได้หลายคน และแต่ละคู่เลือกจังหวะต่างกันได้</div></div>
+        <button class="btn primary" id="addRegistrationBtn">+ เพิ่มหมายเลขแข่งขัน</button>
+      </div>
+      <div class="notice">
+        ในแต่ละหมายเลขสามารถเพิ่ม <b>คู่ชาย–หญิง</b>, <b>Solo ชาย</b> หรือ <b>Solo หญิง</b> ได้ การเลือกจังหวะซ้ำกันหลายรายการภายในหมายเลขเดียวกันจะถูกแจ้งเตือน เพื่อป้องกันหมายเลขเดียวกันปรากฏซ้ำในจังหวะเดียวกัน
+      </div>
+      <div id="registrationList"></div>
+      <div id="registrationWarnings"></div>
+    </div>
+  </section>
+
+  <section id="scoringPanel" class="hidden">
+    <div class="card">
+      <div class="card-head">
+        <div><h2>ลงคะแนนกรรมการพร้อมกัน</h2><div class="hint">แถวเรียงตามหมายเลขแข่งขันจากน้อยไปมากเสมอ และจะไม่ย้ายตำแหน่งระหว่างกรอกคะแนน</div></div>
+        <div class="field" style="min-width:260px"><label>เลือกจังหวะ/รายการ</label><select id="scoreDanceSelect"></select></div>
+      </div>
+      <div class="round-tabs" id="scoreRoundTabs"></div>
+      <div id="tieControls"></div>
+    </div>
+
+    <div class="card">
+      <div class="notice">พิมพ์คะแนนตามปกติ เช่น <b>17</b> ระบบจะเก็บเป็น 17 และเมื่อกด <b>Enter</b> เคอร์เซอร์จะเลื่อนลงไปยังช่องของผู้แข่งขันหมายเลขถัดไปในคอลัมน์กรรมการเดิม</div>
+      <div class="scroll"><table><thead><tr id="scoreHeaders"></tr></thead><tbody id="scoreRows"></tbody></table></div>
+      <div id="scoreWarnings"></div>
+    </div>
+  </section>
+
+  <section id="resultsPanel" class="hidden">
+    <div class="summary-cards" id="summaryCards"></div>
+
+    <div class="card">
+      <div class="card-head"><div><h2>ผลการแข่งขันแบบละเอียด</h2><div class="hint">แสดงคะแนนรอบ 1 และรอบตัดสินเพิ่มเติม โดยเก็บคะแนนเดิมไว้ครบถ้วน</div></div><div class="field" style="min-width:260px"><label>เลือกจังหวะ/รายการ</label><select id="resultDanceSelect"></select></div></div>
+      <div id="detailedResult"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div><h2>ผู้ได้รับเหรียญในแต่ละจังหวะ</h2><div class="hint">ประกาศเฉพาะจังหวะที่คะแนนครบและไม่มีคะแนนเสมอในอันดับ 1–3 • ตรงกับจอพิธีกรและไฟล์ Excel</div></div></div>
+      <div class="winner-grid" id="allWinners"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div><h2>สรุปเหรียญรายสี</h2><div class="hint">นับเฉพาะจังหวะที่ประกาศผลแล้ว • เรียงตามจำนวนเหรียญทอง เงิน และทองแดง</div></div></div>
+      <div id="medalSummary"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div><h2>ส่งออกรายงาน</h2><div class="hint">PDF ใช้หน้าต่างพิมพ์ของเบราว์เซอร์แล้วเลือก “บันทึกเป็น PDF”</div></div></div>
+      <div class="grid">
+        <div class="field"><label>ขอบเขตรายงาน</label><select id="reportScope"><option value="all">ทุกจังหวะ + สรุปเหรียญ</option><option value="current">เฉพาะจังหวะที่เลือก</option></select></div>
+        <div class="field"><label>&nbsp;</label><button class="btn warning" id="exportPdfBtn">พิมพ์ / บันทึก PDF</button></div>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+<section id="printArea"></section>
+<section id="mcView" class="hidden"></section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+(()=>{
+"use strict";
+const KEY="siriraj-dancesport-v6";
+const OLD_KEY="siriraj-dancesport-pair-first-v3";
+const $=id=>document.getElementById(id);
+const uid=()=>window.crypto?.randomUUID?crypto.randomUUID():"id-"+Date.now().toString(36)+Math.random().toString(36).slice(2);
+const todayISO=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
+const escapeHTML=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const formatScore=v=>v===null||v===undefined||v===""?"–":Number(v).toFixed(2).replace(/\.?0+$/,"");
+const normalizedName=v=>String(v||"").trim().toLocaleLowerCase("th-TH").replace(/\s+/g," ");
+
+function defaultColors(){return [
+  ["แดง","#d62828"],["แสด","#f26b21"],["เหลือง","#e3b522"],["เขียวอ่อน","#79b85a"],
+  ["ฟ้า","#4ea8de"],["น้ำเงิน","#3157d5"],["ม่วง","#8338ec"]
+].map(([name,hex])=>({id:uid(),name,hex}))}
+function initialState(){
+  const colors=defaultColors();
+  const dances=["วอลซ์","แทงโก้","ชะชะช่า","รุมบ้า"].map(name=>({id:uid(),name}));
+  const state={version:6,event:{name:"การแข่งขันลีลาศกีฬาสีศิริราช",date:todayISO(),location:""},colors,
+    judges:[1,2,3].map(n=>({id:uid(),name:"กรรมการ "+n})),dances,registrations:[],rounds:{}};
+  dances.forEach(d=>state.rounds[d.id]=[{id:uid(),no:1,targetRank:null,entryIds:null,scores:{}}]);
+  return state;
+}
+function ensureSevenColors(colors){
+  const out=Array.isArray(colors)?colors.map(c=>({id:String(c.id||uid()),name:String(c.name||"สี"),hex:/^#[0-9a-f]{6}$/i.test(c.hex)?c.hex:"#888888"})):[];
+  const defaults=defaultColors();
+  while(out.length<7)out.push(defaults[out.length]);
+  return out.slice(0,7);
+}
+function convertV3(old){
+  const base=initialState();
+  base.event={...base.event,...(old.event||{})};
+  base.colors=ensureSevenColors(old.colors);
+  base.judges=Array.isArray(old.judges)?old.judges.map((j,i)=>({id:String(j.id||uid()),name:String(j.name||`กรรมการ ${i+1}`)})):base.judges;
+  while(base.judges.length<3)base.judges.push({id:uid(),name:`กรรมการ ${base.judges.length+1}`});
+  base.dances=Array.isArray(old.dances)&&old.dances.length?old.dances.map((d,i)=>({id:String(d.id||uid()),name:String(d.name||`จังหวะ ${i+1}`)})):base.dances;
+  base.registrations=[];base.rounds={};
+  const entryMap=new Map();
+  const groups=new Map();
+  for(const p of (old.pairs||[])){
+    const bib=String(p.bib||"").replace(/\D/g,"").slice(-2).padStart(2,"0");
+    const male=String(p.male||"");const female=String(p.female||"");const colorId=p.colorId||base.colors[0].id;
+    const key=`${bib}|${normalizedName(male)}|${colorId}`;
+    let reg=groups.get(key);
+    if(!reg){reg={id:uid(),bib:bib==="00"?"01":bib,colorId,maleName:male,entries:[]};groups.set(key,reg);base.registrations.push(reg)}
+    const entry={id:uid(),type:"couple",femaleName:female,dances:Array.isArray(p.dances)?[...p.dances]:[]};
+    reg.entries.push(entry);entryMap.set(p.id,entry.id);
+  }
+  for(const d of base.dances){
+    const round={id:uid(),no:1,targetRank:null,entryIds:null,scores:{}};
+    for(const j of base.judges){
+      round.scores[j.id]={};
+      const oldJudgeScores=old.scores?.[d.id]?.[j.id]||{};
+      for(const [oldPairId,value] of Object.entries(oldJudgeScores)){
+        const entryId=entryMap.get(oldPairId);const num=Number(value);
+        if(entryId&&Number.isFinite(num)&&num>=0&&num<=20)round.scores[j.id][entryId]=num;
+      }
+    }
+    base.rounds[d.id]=[round];
+  }
+  return base;
+}
+function normalizeState(raw){
+  if(!raw||typeof raw!=="object")throw new Error("โครงสร้างข้อมูลไม่ถูกต้อง");
+  if(raw.version===3)return convertV3(raw);
+  if(raw.version!==6)throw new Error("รองรับไฟล์เวอร์ชัน 6 และไฟล์เวอร์ชันเดิม V3–V5 เท่านั้น");
+  const d=initialState();
+  d.event={...d.event,...(raw.event||{})};
+  d.colors=ensureSevenColors(raw.colors);
+  d.judges=Array.isArray(raw.judges)?raw.judges.map((j,i)=>({id:String(j.id||uid()),name:String(j.name||`กรรมการ ${i+1}`)})):d.judges;
+  while(d.judges.length<3)d.judges.push({id:uid(),name:`กรรมการ ${d.judges.length+1}`});
+  d.dances=Array.isArray(raw.dances)&&raw.dances.length?raw.dances.map((x,i)=>({id:String(x.id||uid()),name:String(x.name||`จังหวะ ${i+1}`)})):d.dances;
+  d.registrations=Array.isArray(raw.registrations)?raw.registrations.map((r,i)=>({
+    id:String(r.id||uid()),bib:String(r.bib||String(i+1).padStart(2,"0")).replace(/\D/g,"").slice(0,2),
+    colorId:String(r.colorId||d.colors[0].id),maleName:String(r.maleName||""),
+    entries:Array.isArray(r.entries)?r.entries.map(e=>({id:String(e.id||uid()),type:["couple","solo_m","solo_f"].includes(e.type)?e.type:"couple",femaleName:String(e.femaleName||""),dances:Array.isArray(e.dances)?e.dances.map(String):[]})):[]
+  })):[];
+  d.rounds={};
+  for(const dance of d.dances){
+    const incoming=Array.isArray(raw.rounds?.[dance.id])?raw.rounds[dance.id]:[];
+    d.rounds[dance.id]=incoming.length?incoming.slice(0,3).map((r,i)=>({id:String(r.id||uid()),no:i+1,targetRank:r.targetRank===null||r.targetRank===undefined?null:Number(r.targetRank),entryIds:Array.isArray(r.entryIds)?r.entryIds.map(String):null,scores:r.scores&&typeof r.scores==="object"?r.scores:{}})):[{id:uid(),no:1,targetRank:null,entryIds:null,scores:{}}];
+  }
+  return d;
+}
+function loadState(){
+  try{const raw=localStorage.getItem(KEY);if(raw)return normalizeState(JSON.parse(raw))}catch(e){console.warn(e)}
+  try{const rawOld=localStorage.getItem(OLD_KEY);if(rawOld){const migrated=normalizeState(JSON.parse(rawOld));localStorage.setItem(KEY,JSON.stringify(migrated));return migrated}}catch(e){console.warn(e)}
+  return initialState();
+}
+let state=loadState();
+let currentTab="setup";
+let scoreDanceId=state.dances[0].id;
+let resultDanceId=state.dances[0].id;
+let scoreRoundByDance={};
+let openDanceEntryId=null;
+
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){console.warn(e)}cloudSchedule()}
+function colorById(id){return state.colors.find(c=>c.id===id)||state.colors[0]||{id:"",name:"ไม่ระบุ",hex:"#888888"}}
+function colorChip(id){const c=colorById(id);return `<span class="pill" style="border-left:6px solid ${escapeHTML(c.hex)};background:${escapeHTML(c.hex)}20;color:#253452">${escapeHTML(c.name)}</span>`}
+function entryTypeLabel(type){return type==="couple"?"คู่ชาย–หญิง":type==="solo_m"?"Solo ชาย":"Solo หญิง"}
+function entryLabel(reg,entry){
+  if(entry.type==="couple")return `${reg.maleName.trim()||"ยังไม่ระบุชาย"} / ${entry.femaleName.trim()||"ยังไม่ระบุหญิง"}`;
+  if(entry.type==="solo_m")return `${reg.maleName.trim()||"ยังไม่ระบุชาย"} (Solo ชาย)`;
+  return `${entry.femaleName.trim()||"ยังไม่ระบุหญิง"} (Solo หญิง)`;
+}
+function allEntryRecords(){
+  const rows=[];
+  state.registrations.forEach((reg,regIndex)=>reg.entries.forEach((entry,entryIndex)=>rows.push({reg,entry,regIndex,entryIndex,id:entry.id})));
+  return rows;
+}
+function sortByBib(a,b){const an=Number(a.reg.bib),bn=Number(b.reg.bib);return (Number.isFinite(an)?an:999)-(Number.isFinite(bn)?bn:999)||a.regIndex-b.regIndex||a.entryIndex-b.entryIndex}
+function nextBib(){
+  const used=new Set(state.registrations.map(r=>Number(r.bib)).filter(n=>n>=1&&n<=99));
+  for(let i=1;i<=99;i++)if(!used.has(i))return String(i).padStart(2,"0");
+  return null;
+}
+function getValidation(){
+  const regWarnings=new Map(state.registrations.map(r=>[r.id,[]]));
+  const entryWarnings=new Map(allEntryRecords().map(r=>[r.id,[]]));
+  const bibMap=new Map();
+  for(const reg of state.registrations){
+    const bib=String(reg.bib||"");
+    if(!/^\d{2}$/.test(bib)||Number(bib)<1||Number(bib)>99)regWarnings.get(reg.id).push("หมายเลขต้องเป็น 01–99");
+    if(bibMap.has(bib)){regWarnings.get(reg.id).push("หมายเลขแข่งขันซ้ำ");regWarnings.get(bibMap.get(bib)).push("หมายเลขแข่งขันซ้ำ")}else bibMap.set(bib,reg.id);
+    if(!state.colors.some(c=>c.id===reg.colorId))regWarnings.get(reg.id).push("ยังไม่ได้เลือกสี");
+    const danceOwners=new Map();
+    for(const entry of reg.entries){
+      const ew=entryWarnings.get(entry.id);
+      if((entry.type==="couple"||entry.type==="solo_m")&&!reg.maleName.trim())ew.push("กรอกชื่อผู้แข่งขันชาย");
+      if((entry.type==="couple"||entry.type==="solo_f")&&!entry.femaleName.trim())ew.push(entry.type==="couple"?"กรอกชื่อคู่หญิง":"กรอกชื่อผู้แข่งขันหญิง");
+      if(!entry.dances.length)ew.push("ยังไม่ได้เลือกจังหวะ");
+      for(const danceId of entry.dances){
+        if(danceOwners.has(danceId)){
+          ew.push("หมายเลขเดียวกันเลือกจังหวะนี้ซ้ำ");
+          entryWarnings.get(danceOwners.get(danceId)).push("หมายเลขเดียวกันเลือกจังหวะนี้ซ้ำ");
+        }else danceOwners.set(danceId,entry.id);
+      }
+    }
+  }
+  const personDanceMap=new Map();
+  for(const row of allEntryRecords()){
+    const names=[];
+    if(row.entry.type==="couple"){names.push(row.reg.maleName,row.entry.femaleName)}
+    else if(row.entry.type==="solo_m")names.push(row.reg.maleName);
+    else names.push(row.entry.femaleName);
+    for(const danceId of row.entry.dances){
+      for(const name of names){
+        const normalized=normalizedName(name);if(!normalized)continue;
+        const key=`${danceId}|${normalized}`;
+        if(personDanceMap.has(key)&&personDanceMap.get(key)!==row.id){
+          entryWarnings.get(row.id).push("ชื่อนักกีฬาคนเดิมลงมากกว่า 1 รายการในจังหวะเดียวกัน");
+          entryWarnings.get(personDanceMap.get(key)).push("ชื่อนักกีฬาคนเดิมลงมากกว่า 1 รายการในจังหวะเดียวกัน");
+        }else personDanceMap.set(key,row.id);
+      }
+    }
+  }
+  for(const [id,list] of regWarnings)regWarnings.set(id,[...new Set(list)]);
+  for(const [id,list] of entryWarnings)entryWarnings.set(id,[...new Set(list)]);
+  return {regWarnings,entryWarnings};
+}
+function validEntriesForDance(danceId){
+  const {regWarnings,entryWarnings}=getValidation();
+  return allEntryRecords().filter(row=>row.entry.dances.includes(danceId)&&regWarnings.get(row.reg.id).length===0&&entryWarnings.get(row.id).length===0).sort(sortByBib);
+}
+function invalidEntriesForDance(danceId){
+  const validIds=new Set(validEntriesForDance(danceId).map(x=>x.id));
+  return allEntryRecords().filter(row=>row.entry.dances.includes(danceId)&&!validIds.has(row.id));
+}
+function ensureRound1(danceId){
+  if(!Array.isArray(state.rounds[danceId])||!state.rounds[danceId].length)state.rounds[danceId]=[{id:uid(),no:1,targetRank:null,entryIds:null,scores:{}}];
+  const rounds=state.rounds[danceId];
+  if(rounds.length>3)rounds.splice(3);
+  rounds.forEach((r,i)=>r.no=i+1);
+  return rounds;
+}
+function findEntryRecord(entryId){return allEntryRecords().find(r=>r.id===entryId)}
+function roundParticipants(danceId,round){
+  const valid=validEntriesForDance(danceId);
+  if(round.no===1||!Array.isArray(round.entryIds))return valid;
+  const ids=new Set(round.entryIds);return valid.filter(r=>ids.has(r.id)).sort(sortByBib);
+}
+function getRoundScore(round,judgeId,entryId){const v=round.scores?.[judgeId]?.[entryId];const n=Number(v);return Number.isFinite(n)&&n>=0&&n<=20?n:null}
+function setRoundScore(round,judgeId,entryId,value){round.scores??={};round.scores[judgeId]??={};if(value===null)delete round.scores[judgeId][entryId];else round.scores[judgeId][entryId]=value;save()}
+function roundResults(danceId,round){
+  const rows=roundParticipants(danceId,round).map((record,index)=>{
+    const scores=state.judges.map(j=>getRoundScore(round,j.id,record.id));
+    const count=scores.filter(v=>v!==null).length;
+    return {record,scores,count,complete:count===state.judges.length,total:scores.reduce((a,b)=>a+(b??0),0),order:index,roundRank:null};
+  });
+  const complete=rows.filter(r=>r.complete).sort((a,b)=>b.total-a.total||a.order-b.order);
+  complete.forEach((r,i)=>r.roundRank=i>0&&Math.abs(r.total-complete[i-1].total)<1e-9?complete[i-1].roundRank:i+1);
+  return rows;
+}
+function roundComplete(danceId,round){const rows=roundResults(danceId,round);return rows.length>0&&rows.every(r=>r.complete)}
+function partitionByTotal(rows){
+  const sorted=[...rows].sort((a,b)=>b.total-a.total||a.order-b.order);const groups=[];
+  for(const row of sorted){const last=groups[groups.length-1];if(last&&Math.abs(last.total-row.total)<1e-9)last.ids.push(row.record.id);else groups.push({ids:[row.record.id],total:row.total,sourceRoundNo:1})}
+  return groups;
+}
+function sameIdSet(a,b){if(a.length!==b.length)return false;const set=new Set(a);return b.every(x=>set.has(x))}
+function finalRanking(danceId){
+  const rounds=ensureRound1(danceId);const baseResults=roundResults(danceId,rounds[0]);
+  const completeBase=baseResults.filter(r=>r.complete);let groups=partitionByTotal(completeBase);
+  const appliedRounds=[];
+  for(const round of rounds.slice(1)){
+    if(!roundComplete(danceId,round))continue;
+    const results=roundResults(danceId,round);const ids=results.map(r=>r.record.id);
+    const index=groups.findIndex(g=>sameIdSet(g.ids,ids));if(index<0)continue;
+    const replacement=partitionByTotal(results).map(g=>({...g,sourceRoundNo:round.no}));
+    groups.splice(index,1,...replacement);appliedRounds.push(round.no);
+  }
+  let position=1;const rankMap=new Map();
+  for(const group of groups){group.rankStart=position;group.ids.forEach(id=>rankMap.set(id,position));position+=group.ids.length}
+  const incompleteIds=baseResults.filter(r=>!r.complete).map(r=>r.record.id);
+  return {groups,rankMap,incompleteIds,baseResults,appliedRounds};
+}
+function unresolvedTieGroups(danceId){return finalRanking(danceId).groups.filter(g=>g.ids.length>1)}
+function medalLabel(rank){return rank===1?"🥇 ทอง":rank===2?"🥈 เงิน":rank===3?"🥉 ทองแดง":"–"}
+function medalClass(rank){return rank===1?"gold":rank===2?"silver":rank===3?"bronze":""}
+function latestCompletedRoundForEntry(danceId,entryId){
+  let latest=ensureRound1(danceId)[0];
+  for(const round of ensureRound1(danceId).slice(1))if(round.entryIds?.includes(entryId)&&roundComplete(danceId,round))latest=round;
+  return latest;
+}
+function totalForEntryInRound(danceId,round,entryId){const row=roundResults(danceId,round).find(r=>r.record.id===entryId);return row?.complete?row.total:null}
+
+function switchTab(tab){
+  currentTab=tab;document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+  ["setup","registration","scoring","results"].forEach(name=>$(name+"Panel").classList.toggle("hidden",name!==tab));
+  if(tab==="setup")renderSetup();if(tab==="registration")renderRegistrations();if(tab==="scoring")renderScoring();if(tab==="results")renderResults();
+}
+function renderSetup(){
+  $("eventName").value=state.event.name;$("eventDate").value=state.event.date;$("eventLocation").value=state.event.location;
+  $("colorRows").innerHTML=state.colors.map((c,i)=>`<div class="grid" style="grid-template-columns:60px 1fr 80px;align-items:end"><div class="field"><label>ลำดับ</label><input value="${i+1}" disabled></div><div class="field"><label>ชื่อสี</label><input data-color-id="${c.id}" data-color-field="name" value="${escapeHTML(c.name)}"></div><div class="field"><label>เฉดสี</label><input type="color" data-color-id="${c.id}" data-color-field="hex" value="${escapeHTML(c.hex)}"></div></div>`).join("");
+  $("judgeRows").innerHTML=state.judges.map((j,i)=>`<tr><td class="center"><b>${i+1}</b></td><td><input data-judge-id="${j.id}" value="${escapeHTML(j.name)}"></td><td class="center"><button class="btn danger small" data-delete-judge="${j.id}" ${state.judges.length<=3?"disabled":""}>ลบ</button></td></tr>`).join("");
+  $("danceRows").innerHTML=state.dances.map((d,i)=>`<tr><td class="center"><b>${i+1}</b></td><td><input data-dance-id="${d.id}" value="${escapeHTML(d.name)}"></td><td class="center"><button class="btn small" data-move-dance="${d.id}" data-dir="-1" ${i===0?"disabled":""}>↑</button> <button class="btn small" data-move-dance="${d.id}" data-dir="1" ${i===state.dances.length-1?"disabled":""}>↓</button> <button class="btn danger small" data-delete-dance="${d.id}" ${state.dances.length===1?"disabled":""}>ลบ</button></td></tr>`).join("");
+}
+function dancePickerHTML(reg,entry){
+  const selected=state.dances.filter(d=>entry.dances.includes(d.id));
+  return `<details class="dance-picker" data-entry-details="${entry.id}" ${openDanceEntryId===entry.id?"open":""}>
+    <summary><span class="btn primary small">เลือกจังหวะ (${selected.length}) ▾</span></summary>
+    <div class="dance-panel"><div class="hint" style="margin-bottom:8px">เลือกได้หลายจังหวะ</div><div class="dance-grid">${state.dances.map(d=>`<label class="dance-choice"><input type="checkbox" data-entry-dance="${entry.id}" data-dance-id="${d.id}" ${entry.dances.includes(d.id)?"checked":""}> ${escapeHTML(d.name)}</label>`).join("")}</div></div>
+  </details><div style="margin-top:6px;white-space:normal">${selected.length?selected.map(d=>`<span class="pill">${escapeHTML(d.name)}</span>`).join(""):'<span class="hint">ยังไม่ได้เลือกจังหวะ</span>'}</div>`;
+}
+function renderRegistrations(){
+  const validation=getValidation();
+  $("registrationList").innerHTML=state.registrations.map(reg=>{
+    const rw=validation.regWarnings.get(reg.id)||[];
+    return `<article class="registration-card" data-registration-card="${reg.id}">
+      <div class="registration-head">
+        <div class="field"><label>หมายเลขแข่งขัน</label><input inputmode="numeric" maxlength="2" data-reg-id="${reg.id}" data-reg-field="bib" value="${escapeHTML(reg.bib)}" placeholder="01"></div>
+        <div class="field"><label>สี</label><select data-reg-id="${reg.id}" data-reg-field="colorId">${state.colors.map(c=>`<option value="${c.id}" ${c.id===reg.colorId?"selected":""}>${escapeHTML(c.name)}</option>`).join("")}</select></div>
+        <div class="field"><label>ชื่อผู้แข่งขันชาย <span class="hint">(เว้นว่างได้ หากมีเฉพาะ Solo หญิง)</span></label><input data-reg-id="${reg.id}" data-reg-field="maleName" value="${escapeHTML(reg.maleName)}" placeholder="ชื่อ–นามสกุลนักกีฬาชาย"></div>
+        <button type="button" class="btn danger delete-reg-btn" data-action="delete-registration" data-reg-id="${reg.id}">ลบหมายเลขนี้ทั้งแถบ</button>
+      </div>
+      <div class="entry-list">
+        ${reg.entries.map((entry,index)=>{
+          const ew=validation.entryWarnings.get(entry.id)||[];
+          const partnerField=entry.type==="solo_m"?`<div class="field"><label>ผู้เข้าแข่งขัน</label><div class="pill">ใช้ชื่อนักกีฬาชายด้านบน</div></div>`:`<div class="field"><label>${entry.type==="couple"?"ชื่อคู่เต้นหญิง":"ชื่อผู้แข่งขันหญิง"}</label><input data-entry-id="${entry.id}" data-entry-field="femaleName" value="${escapeHTML(entry.femaleName)}" placeholder="ชื่อ–นามสกุล"></div>`;
+          return `<div class="entry-row" data-entry-row="${entry.id}">
+            <div class="field"><label>รูปแบบการแข่งขัน</label><select data-entry-id="${entry.id}" data-entry-field="type"><option value="couple" ${entry.type==="couple"?"selected":""}>คู่ชาย–หญิง</option><option value="solo_m" ${entry.type==="solo_m"?"selected":""}>Solo ชาย</option><option value="solo_f" ${entry.type==="solo_f"?"selected":""}>Solo หญิง</option></select></div>
+            ${partnerField}
+            <div class="field wide"><label>จังหวะที่ลงแข่งขัน</label>${dancePickerHTML(reg,entry)}</div>
+            <div class="entry-status"><label style="font-weight:700">สถานะ</label><div>${ew.length?`<span class="pill error">${escapeHTML(ew.join("; "))}</span>`:'<span class="pill ok">พร้อมลงคะแนน</span>'}</div></div>
+            <button type="button" class="btn danger small delete-entry-btn" data-action="delete-entry" data-reg-id="${reg.id}" data-entry-id="${entry.id}">ลบรายการนี้</button>
+          </div>`;
+        }).join("")||'<div class="empty">ยังไม่มีคู่หรือรายการ Solo ในหมายเลขนี้</div>'}
+      </div>
+      <div class="entry-actions button-row">
+        <button class="btn primary small" data-add-entry="couple" data-reg-parent="${reg.id}">+ เพิ่มคู่หญิง</button>
+        <button class="btn small" data-add-entry="solo_m" data-reg-parent="${reg.id}">+ เพิ่ม Solo ชาย</button>
+        <button class="btn small" data-add-entry="solo_f" data-reg-parent="${reg.id}">+ เพิ่ม Solo หญิง</button>
+        <span>${rw.length?`<span class="pill error">${escapeHTML(rw.join("; "))}</span>`:`${colorChip(reg.colorId)}`}</span>
+      </div>
+    </article>`;
+  }).join("")||'<div class="empty">ยังไม่มีผู้สมัคร กด “เพิ่มหมายเลขแข่งขัน” เพื่อเริ่มต้น</div>';
+  const v=getValidation();const issueCount=[...v.regWarnings.values(),...v.entryWarnings.values()].filter(x=>x.length).length;
+  $("registrationWarnings").innerHTML=issueCount?`<div class="notice error-text">พบรายการที่ต้องแก้ไข ${issueCount} จุด รายการที่มีคำเตือนจะยังไม่แสดงในหน้าลงคะแนน</div>`:'<div class="notice ok-text">ข้อมูลผู้สมัครทั้งหมดพร้อมใช้งาน</div>';
+}
+function currentScoreRound(){
+  const rounds=ensureRound1(scoreDanceId);let id=scoreRoundByDance[scoreDanceId];let round=rounds.find(r=>r.id===id);if(!round){round=rounds[0];scoreRoundByDance[scoreDanceId]=round.id}return round;
+}
+function renderScoring(){
+  if(!state.dances.some(d=>d.id===scoreDanceId))scoreDanceId=state.dances[0].id;
+  $("scoreDanceSelect").innerHTML=state.dances.map((d,i)=>`<option value="${d.id}" ${d.id===scoreDanceId?"selected":""}>${i+1}. ${escapeHTML(d.name)}</option>`).join("");
+  renderScoreRoundTabs();renderTieControls();renderScoreTable();
+}
+function renderScoreRoundTabs(){
+  const current=currentScoreRound();
+  $("scoreRoundTabs").innerHTML=ensureRound1(scoreDanceId).map(r=>`<button class="round-tab ${r.id===current.id?"active":""}" data-score-round="${r.id}">${r.no===1?"รอบ 1":`รอบ ${r.no} – ตัดสินอันดับ ${r.targetRank}`}</button>`).join("");
+}
+function renderTieControls(){
+  const rounds=ensureRound1(scoreDanceId);const ties=unresolvedTieGroups(scoreDanceId);const last=rounds[rounds.length-1];
+  let html='<div class="notice">';
+  if(rounds.length>=3)html+='มีการแข่งขันครบ 3 รอบแล้ว หากยังเสมอสามารถแก้ไขคะแนน หรือลบรอบล่าสุดแล้วจัดรอบใหม่ได้';
+  else if(rounds.length>1&&!roundComplete(scoreDanceId,last))html+=`กรุณากรอกคะแนนรอบ ${last.no} ให้ครบก่อน จึงจะเพิ่มรอบตัดสินถัดไปได้`;
+  else if(!ties.length)html+='ขณะนี้ไม่มีอันดับที่คะแนนเสมอซึ่งต้องจัดรอบตัดสินเพิ่มเติม';
+  else html+=`<div class="button-row"><div class="field" style="min-width:330px"><label>อันดับที่ต้องจัดรอบตัดสิน</label><select id="tieRankSelect">${ties.map(g=>`<option value="${g.rankStart}">อันดับ ${g.rankStart}: ${g.ids.map(id=>{const r=findEntryRecord(id);return r?`หมายเลข ${r.reg.bib}`:""}).join(", ")}</option>`).join("")}</select></div><button class="btn primary" id="addTieRoundBtn">+ เพิ่มรอบ ${rounds.length+1}</button></div>`;
+  if(rounds.length>1)html+=`<div style="margin-top:9px"><button class="btn danger small" id="deleteLatestRoundBtn">ลบรอบ ${rounds.length} ล่าสุด</button></div>`;
+  html+='</div>';$("tieControls").innerHTML=html;
+}
+function renderScoreTable(){
+  const round=currentScoreRound();const participants=roundParticipants(scoreDanceId,round);
+  $("scoreHeaders").innerHTML=`<th class="center">หมายเลข</th><th>ผู้เข้าแข่งขัน</th><th>ประเภท</th><th>สี</th>${state.judges.map(j=>`<th class="center">${escapeHTML(j.name)}<br>0–20</th>`).join("")}<th class="center">รวมรอบนี้</th>${round.no>1?'<th class="center">อันดับรอบนี้</th>':""}<th class="center">อันดับสุดท้าย</th><th class="center">สถานะ</th>`;
+  $("scoreRows").innerHTML=participants.map((record,rowIndex)=>`<tr data-score-row="${record.id}">
+    <td class="center"><b>${escapeHTML(record.reg.bib)}</b></td><td class="name-cell">${escapeHTML(entryLabel(record.reg,record.entry))}</td><td>${escapeHTML(entryTypeLabel(record.entry.type))}</td><td>${colorChip(record.reg.colorId)}</td>
+    ${state.judges.map((j,judgeIndex)=>{const v=getRoundScore(round,j.id,record.id);return `<td class="center"><input class="score-input" type="text" inputmode="decimal" autocomplete="off" maxlength="5" data-score-entry="${record.id}" data-score-judge="${j.id}" data-row-index="${rowIndex}" data-judge-index="${judgeIndex}" value="${v===null?"":formatScore(v)}"></td>`}).join("")}
+    <td class="center"><b data-total-entry="${record.id}">–</b></td>${round.no>1?`<td class="center" data-round-rank-entry="${record.id}">–</td>`:""}<td class="center" data-final-entry="${record.id}">–</td><td class="center" data-score-status="${record.id}">–</td>
+  </tr>`).join("")||'<tr><td colspan="30" class="empty">ยังไม่มีผู้สมัครที่ถูกต้องสำหรับจังหวะนี้</td></tr>';
+  const invalid=invalidEntriesForDance(scoreDanceId);$("scoreWarnings").innerHTML=invalid.length?`<div class="notice error-text">มี ${invalid.length} รายการที่เลือกจังหวะนี้แต่ข้อมูลยังไม่สมบูรณ์ กรุณาแก้ไขในหน้าลงชื่อ</div>`:"";
+  updateScoringDerived();
+}
+function updateScoringDerived(){
+  const round=currentScoreRound();const results=roundResults(scoreDanceId,round);const final=finalRanking(scoreDanceId);
+  for(const row of results){
+    const id=row.record.id;const totalEl=document.querySelector(`[data-total-entry="${CSS.escape(id)}"]`);const rrEl=document.querySelector(`[data-round-rank-entry="${CSS.escape(id)}"]`);const fEl=document.querySelector(`[data-final-entry="${CSS.escape(id)}"]`);const statusEl=document.querySelector(`[data-score-status="${CSS.escape(id)}"]`);
+    if(totalEl)totalEl.textContent=formatScore(row.total);if(rrEl)rrEl.textContent=row.roundRank??"–";
+    const finalRank=final.rankMap.get(id);if(fEl)fEl.innerHTML=finalRank?`<span class="${medalClass(finalRank)}">${finalRank<=3?medalLabel(finalRank):`อันดับ ${finalRank}`}</span>`:"–";
+    if(statusEl)statusEl.innerHTML=row.complete?'<span class="pill ok">คะแนนครบ</span>':`<span class="pill warn">${row.count}/${state.judges.length}</span>`;
+  }
+  renderTieControls();
+}
+function moveScoreFocus(input){
+  const row=Number(input.dataset.rowIndex),judge=Number(input.dataset.judgeIndex);let next=document.querySelector(`.score-input[data-row-index="${row+1}"][data-judge-index="${judge}"]`);
+  if(!next)next=document.querySelector(`.score-input[data-row-index="0"][data-judge-index="${judge+1}"]`);
+  if(next){next.focus();next.select()}
+}
+function finalRowsForDance(danceId){
+  const ranking=finalRanking(danceId);const baseMap=new Map(ranking.baseResults.map(r=>[r.record.id,r]));
+  return validEntriesForDance(danceId).map(record=>({record,rank:ranking.rankMap.get(record.id)??null,base:baseMap.get(record.id),latestRound:latestCompletedRoundForEntry(danceId,record.id)})).sort((a,b)=>(a.rank??999)-(b.rank??999)||sortByBib(a.record,b.record));
+}
+function winnersForDance(danceId){const d=state.dances.find(x=>x.id===danceId);if(!d||!danceStatus(d).final)return [];return finalRowsForDance(danceId).filter(r=>r.rank>=1&&r.rank<=3)}
+function winnerCardsHTML(){
+  return state.dances.map(d=>{const winners=winnersForDance(d.id);return `<article class="winner-card"><h3>${escapeHTML(d.name)}</h3>${winners.length?`<table><thead><tr><th>เหรียญ</th><th>หมายเลข</th><th>ผู้แข่งขัน</th><th>สี</th><th>รอบตัดสิน</th></tr></thead><tbody>${winners.map(w=>`<tr><td class="${medalClass(w.rank)}">${medalLabel(w.rank)}</td><td><b>${escapeHTML(w.record.reg.bib)}</b></td><td class="name-cell">${escapeHTML(entryLabel(w.record.reg,w.record.entry))}</td><td>${escapeHTML(colorById(w.record.reg.colorId).name)}</td><td>รอบ ${w.latestRound.no}</td></tr>`).join("")}</tbody></table>`:`<div class="empty">⏳ รอผล – ${escapeHTML(danceStatus(d).reason)}</div>`}</article>`}).join("");
+}
+function detailedResultHTML(danceId){
+  const rounds=ensureRound1(danceId);const rows=finalRowsForDance(danceId);
+  return `<div class="scroll"><table><thead><tr><th class="center">อันดับสุดท้าย</th><th>เหรียญ</th><th class="center">หมายเลข</th><th>ผู้แข่งขัน</th><th>ประเภท</th><th>สี</th>${rounds.map(r=>`<th class="center">คะแนนรอบ ${r.no}</th>`).join("")}<th class="center">สถานะรอบ 1</th></tr></thead><tbody>${rows.map(row=>`<tr class="${row.rank===1?"rank-1":row.rank===2?"rank-2":row.rank===3?"rank-3":""}"><td class="center"><b>${row.rank??"–"}</b></td><td class="${medalClass(row.rank)}">${medalLabel(row.rank)}</td><td class="center"><b>${escapeHTML(row.record.reg.bib)}</b></td><td class="name-cell">${escapeHTML(entryLabel(row.record.reg,row.record.entry))}</td><td>${escapeHTML(entryTypeLabel(row.record.entry.type))}</td><td>${colorChip(row.record.reg.colorId)}</td>${rounds.map(r=>{const t=totalForEntryInRound(danceId,r,row.record.id);return `<td class="center">${t===null?"–":formatScore(t)}</td>`}).join("")}<td class="center">${row.base?.complete?'<span class="pill ok">ครบ</span>':`<span class="pill warn">${row.base?.count??0}/${state.judges.length}</span>`}</td></tr>`).join("")||'<tr><td colspan="30" class="empty">ไม่มีผู้สมัคร</td></tr>'}</tbody></table></div>`;
+}
+function medalStats(){
+  const map=new Map(state.colors.map(c=>[c.id,{color:c,gold:0,silver:0,bronze:0}]));
+  for(const dance of state.dances)for(const w of winnersForDance(dance.id)){const stat=map.get(w.record.reg.colorId);if(!stat)continue;if(w.rank===1)stat.gold++;if(w.rank===2)stat.silver++;if(w.rank===3)stat.bronze++}
+  return [...map.values()].sort((a,b)=>b.gold-a.gold||b.silver-a.silver||b.bronze-a.bronze||state.colors.indexOf(a.color)-state.colors.indexOf(b.color));
+}
+function medalSummaryHTML(){return `<div class="scroll"><table><thead><tr><th class="center">อันดับสี</th><th>สี</th><th class="center">🥇 ทอง</th><th class="center">🥈 เงิน</th><th class="center">🥉 ทองแดง</th><th class="center">รวม</th></tr></thead><tbody>${medalStats().map((s,i)=>`<tr><td class="center"><b>${i+1}</b></td><td>${colorChip(s.color.id)}</td><td class="center">${s.gold}</td><td class="center">${s.silver}</td><td class="center">${s.bronze}</td><td class="center"><b>${s.gold+s.silver+s.bronze}</b></td></tr>`).join("")}</tbody></table></div>`}
+function scoreCompletion(){
+  let required=0,filled=0;
+  for(const dance of state.dances)for(const round of ensureRound1(dance.id)){const participants=roundParticipants(dance.id,round);required+=participants.length*state.judges.length;for(const p of participants)for(const j of state.judges)if(getRoundScore(round,j.id,p.id)!==null)filled++}
+  return required?Math.round(filled/required*100):0;
+}
+function renderResults(){
+  if(!state.dances.some(d=>d.id===resultDanceId))resultDanceId=state.dances[0].id;
+  $("resultDanceSelect").innerHTML=state.dances.map((d,i)=>`<option value="${d.id}" ${d.id===resultDanceId?"selected":""}>${i+1}. ${escapeHTML(d.name)}</option>`).join("");
+  const entries=allEntryRecords().length;const rounds=state.dances.reduce((n,d)=>n+ensureRound1(d.id).length,0);
+  $("summaryCards").innerHTML=[["หมายเลขแข่งขัน",state.registrations.length],["รายการผู้สมัคร",entries],["กรรมการ",state.judges.length],["รอบทั้งหมด",rounds],["คะแนนที่กรอก",scoreCompletion()+"%"]].map(([label,value])=>`<div class="summary-card"><span class="hint">${label}</span><strong>${value}</strong></div>`).join("");
+  $("allWinners").innerHTML=winnerCardsHTML();$("detailedResult").innerHTML=detailedResultHTML(resultDanceId);$("medalSummary").innerHTML=medalSummaryHTML();
+}
+function reportWinnerTable(dance){
+  const winners=winnersForDance(dance.id);return `<section><h3>${escapeHTML(dance.name)}</h3><table><thead><tr><th>เหรียญ</th><th>หมายเลข</th><th>ผู้แข่งขัน</th><th>ประเภท</th><th>สี</th><th>รอบตัดสิน</th><th>คะแนนรอบตัดสิน</th></tr></thead><tbody>${winners.map(w=>`<tr><td>${medalLabel(w.rank)}</td><td>${escapeHTML(w.record.reg.bib)}</td><td>${escapeHTML(entryLabel(w.record.reg,w.record.entry))}</td><td>${escapeHTML(entryTypeLabel(w.record.entry.type))}</td><td>${escapeHTML(colorById(w.record.reg.colorId).name)}</td><td>รอบ ${w.latestRound.no}</td><td>${formatScore(totalForEntryInRound(dance.id,w.latestRound,w.record.id))}</td></tr>`).join("")||`<tr><td colspan="7">รอผล – ${escapeHTML(danceStatus(dance).reason)}</td></tr>`}</tbody></table></section>`;
+}
+function reportDetailTable(dance){
+  const rounds=ensureRound1(dance.id);const rows=finalRowsForDance(dance.id);return `<section><h3>ผลละเอียด: ${escapeHTML(dance.name)}</h3><table><thead><tr><th>อันดับ</th><th>เหรียญ</th><th>หมายเลข</th><th>ผู้แข่งขัน</th><th>ประเภท</th><th>สี</th>${rounds.map(r=>`<th>รอบ ${r.no}</th>`).join("")}</tr></thead><tbody>${rows.map(row=>`<tr><td>${row.rank??"–"}</td><td>${medalLabel(row.rank)}</td><td>${escapeHTML(row.record.reg.bib)}</td><td>${escapeHTML(entryLabel(row.record.reg,row.record.entry))}</td><td>${escapeHTML(entryTypeLabel(row.record.entry.type))}</td><td>${escapeHTML(colorById(row.record.reg.colorId).name)}</td>${rounds.map(r=>`<td>${formatScore(totalForEntryInRound(dance.id,r,row.record.id))}</td>`).join("")}</tr>`).join("")}</tbody></table></section>`;
+}
+function buildPrintReport(){
+  const scope=$("reportScope").value;const dances=scope==="all"?state.dances:state.dances.filter(d=>d.id===resultDanceId);
+  return `<div class="report"><h1>${escapeHTML(state.event.name)}</h1><div class="meta">วันที่ ${escapeHTML(state.event.date||"–")} | สถานที่ ${escapeHTML(state.event.location||"–")} | กรรมการ ${state.judges.length} ท่าน | คะแนนเต็มท่านละ 20</div><h2>ผลการแข่งขันแบบละเอียด</h2>${dances.map(reportDetailTable).join("")}<h2>ผู้ได้รับเหรียญแต่ละจังหวะ</h2>${dances.map(reportWinnerTable).join("")}${scope==="all"?`<h2>สรุปเหรียญรายสี</h2>${medalSummaryHTML()}`:""}<p>คะแนนเท่ากันสามารถจัดรอบ 2 และรอบ 3 โดยคะแนนเดิมยังคงอยู่ในรายงาน</p></div>`;
+}
+function safeFilename(){return String(state.event.name||"รายงานคะแนนลีลาศ").trim().replace(/[\\/:*?"<>|]+/g,"").replace(/\s+/g,"_")||"รายงานคะแนนลีลาศ"}
+function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1200)}
+
+// Navigation and setup events
+document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>switchTab(btn.dataset.tab)));
+[["eventName","name"],["eventDate","date"],["eventLocation","location"]].forEach(([id,key])=>$(id).addEventListener("input",e=>{state.event[key]=e.target.value;save()}));
+$("colorRows").addEventListener("input",e=>{const id=e.target.dataset.colorId,field=e.target.dataset.colorField;if(!id||!field)return;const c=state.colors.find(x=>x.id===id);if(c){c[field]=e.target.value;save()}});
+$("judgeRows").addEventListener("input",e=>{const id=e.target.dataset.judgeId;if(!id)return;const j=state.judges.find(x=>x.id===id);if(j){j.name=e.target.value;save()}});
+$("danceRows").addEventListener("input",e=>{const id=e.target.dataset.danceId;if(!id)return;const d=state.dances.find(x=>x.id===id);if(d){d.name=e.target.value;save()}});
+$("addJudgeBtn").addEventListener("click",()=>{state.judges.push({id:uid(),name:`กรรมการ ${state.judges.length+1}`});save();renderSetup()});
+$("judgeRows").addEventListener("click",e=>{const id=e.target.dataset.deleteJudge;if(!id||state.judges.length<=3)return;if(!confirm("ลบกรรมการและคะแนนทั้งหมดของกรรมการท่านนี้หรือไม่?"))return;state.judges=state.judges.filter(j=>j.id!==id);for(const rounds of Object.values(state.rounds))for(const round of rounds)delete round.scores[id];save();renderSetup()});
+$("addDanceBtn").addEventListener("click",()=>{const dance={id:uid(),name:`จังหวะ ${state.dances.length+1}`};state.dances.push(dance);state.rounds[dance.id]=[{id:uid(),no:1,targetRank:null,entryIds:null,scores:{}}];save();renderSetup()});
+$("danceRows").addEventListener("click",e=>{const move=e.target.dataset.moveDance;if(move){const i=state.dances.findIndex(d=>d.id===move),j=i+Number(e.target.dataset.dir);if(i>=0&&j>=0&&j<state.dances.length)[state.dances[i],state.dances[j]]=[state.dances[j],state.dances[i]];save();renderSetup();return}const id=e.target.dataset.deleteDance;if(!id||state.dances.length===1)return;if(!confirm("ลบจังหวะนี้ คะแนน และรอบตัดสินทั้งหมดหรือไม่?"))return;state.dances=state.dances.filter(d=>d.id!==id);state.registrations.forEach(r=>r.entries.forEach(entry=>entry.dances=entry.dances.filter(x=>x!==id)));delete state.rounds[id];save();renderSetup()});
+
+
+// Robust deletion helpers: exposed globally so buttons can call them directly.
+window.deleteRegistrationById = function(regId){
+  const reg=state.registrations.find(r=>String(r.id)===String(regId));
+  if(!reg){ alert("ไม่พบหมายเลขแข่งขันนี้"); return; }
+  if(!confirm("ต้องการลบหมายเลขแข่งขันนี้ทั้งแถบ รวมชื่อทั้งหมด คู่/Solo และคะแนนทั้งหมดหรือไม่?")) return;
+  const ids=new Set((reg.entries||[]).map(entry=>String(entry.id)));
+  state.registrations=state.registrations.filter(r=>String(r.id)!==String(regId));
+  for(const rounds of Object.values(state.rounds||{})){
+    for(const round of (rounds||[])){
+      if(Array.isArray(round.entryIds)) round.entryIds=round.entryIds.filter(id=>!ids.has(String(id)));
+      for(const scores of Object.values(round.scores||{})){
+        for(const id of ids) delete scores[id];
+      }
+    }
+  }
+  save();
+  renderRegistrations();
+};
+
+window.deleteEntryById = function(regId,entryId){
+  const reg=state.registrations.find(r=>String(r.id)===String(regId));
+  if(!reg){ alert("ไม่พบหมายเลขแข่งขันนี้"); return; }
+  const entry=reg.entries.find(x=>String(x.id)===String(entryId));
+  if(!entry){ alert("ไม่พบรายการนี้"); return; }
+  if(!confirm("ต้องการลบชื่อนี้และรายการแข่งขัน/คะแนนที่เกี่ยวข้องหรือไม่?")) return;
+  reg.entries=reg.entries.filter(x=>String(x.id)!==String(entryId));
+  for(const rounds of Object.values(state.rounds||{})){
+    for(const round of (rounds||[])){
+      if(Array.isArray(round.entryIds)) round.entryIds=round.entryIds.filter(id=>String(id)!==String(entryId));
+      for(const scores of Object.values(round.scores||{})) delete scores[entryId];
+    }
+  }
+  save();
+  renderRegistrations();
+};
+
+// Registration events
+$("addRegistrationBtn").addEventListener("click",()=>{const bib=nextBib();if(!bib){alert("มีหมายเลขแข่งขันครบ 01–99 แล้ว");return}state.registrations.push({id:uid(),bib,colorId:state.colors[0].id,maleName:"",entries:[{id:uid(),type:"couple",femaleName:"",dances:[]}]});save();renderRegistrations()});
+$("registrationList").addEventListener("input",e=>{
+  const regId=e.target.dataset.regId,regField=e.target.dataset.regField,entryId=e.target.dataset.entryId,entryField=e.target.dataset.entryField;
+  if(regId&&regField){const reg=state.registrations.find(r=>r.id===regId);if(!reg)return;if(regField==="bib"){e.target.value=e.target.value.replace(/\D/g,"").slice(0,2);reg.bib=e.target.value}else reg[regField]=e.target.value;save()}
+  if(entryId&&entryField==="femaleName"){const row=findEntryRecord(entryId);if(row){row.entry.femaleName=e.target.value;save()}}
+});
+$("registrationList").addEventListener("focusout",e=>{if(e.target.dataset.regField==="bib"){const reg=state.registrations.find(r=>r.id===e.target.dataset.regId);if(reg&&reg.bib){reg.bib=String(Math.min(99,Math.max(1,Number(reg.bib)||1))).padStart(2,"0");e.target.value=reg.bib;save()}}});
+$("registrationList").addEventListener("change",e=>{
+  const regId=e.target.dataset.regId,regField=e.target.dataset.regField,entryId=e.target.dataset.entryId,entryField=e.target.dataset.entryField;
+  if(regId&&regField){const reg=state.registrations.find(r=>r.id===regId);if(reg){reg[regField]=e.target.value;save()}return}
+  if(entryId&&entryField){const row=findEntryRecord(entryId);if(row){row.entry[entryField]=e.target.value;if(entryField==="type"){if(e.target.value==="solo_m")row.entry.femaleName="";save();renderRegistrations()}else save()}return}
+  const danceEntry=e.target.dataset.entryDance;if(danceEntry){const row=findEntryRecord(danceEntry);if(!row)return;const danceId=e.target.dataset.danceId;if(e.target.checked){if(!row.entry.dances.includes(danceId))row.entry.dances.push(danceId)}else row.entry.dances=row.entry.dances.filter(id=>id!==danceId);openDanceEntryId=danceEntry;save();renderRegistrations()}
+});
+$("registrationList").addEventListener("click",e=>{
+  const btn=e.target.closest("button[data-add-entry]");
+  if(!btn)return;
+  const addType=btn.getAttribute("data-add-entry");
+  const regParent=btn.getAttribute("data-reg-parent");
+  if(addType&&regParent){
+    const reg=state.registrations.find(r=>String(r.id)===String(regParent));
+    if(!reg)return;
+    reg.entries.push({id:uid(),type:addType,femaleName:"",dances:[]});
+    save();renderRegistrations();
+  }
+});
+
+
+// Delete buttons: plain event delegation, independent of inline onclick.
+document.addEventListener("click", function(e){
+  const regBtn=e.target.closest("button[data-action='delete-registration']");
+  if(regBtn){
+    e.preventDefault();
+    if(typeof window.deleteRegistrationById==="function") window.deleteRegistrationById(regBtn.dataset.regId);
+    return;
+  }
+  const entryBtn=e.target.closest("button[data-action='delete-entry']");
+  if(entryBtn){
+    e.preventDefault();
+    if(typeof window.deleteEntryById==="function") window.deleteEntryById(entryBtn.dataset.regId,entryBtn.dataset.entryId);
+  }
+});
+
+// Scoring events
+$("scoreDanceSelect").addEventListener("change",e=>{scoreDanceId=e.target.value;scoreRoundByDance[scoreDanceId]=ensureRound1(scoreDanceId)[0].id;renderScoring()});
+$("scoreRoundTabs").addEventListener("click",e=>{const id=e.target.dataset.scoreRound;if(id){scoreRoundByDance[scoreDanceId]=id;renderScoring()}});
+$("tieControls").addEventListener("click",e=>{
+  if(e.target.id==="addTieRoundBtn"){
+    const rounds=ensureRound1(scoreDanceId);if(rounds.length>=3)return;const last=rounds[rounds.length-1];if(rounds.length>1&&!roundComplete(scoreDanceId,last)){alert("กรุณากรอกคะแนนรอบล่าสุดให้ครบก่อน");return}
+    const rank=Number($("tieRankSelect")?.value),group=unresolvedTieGroups(scoreDanceId).find(g=>g.rankStart===rank);if(!group)return;
+    const round={id:uid(),no:rounds.length+1,targetRank:rank,entryIds:[...group.ids],scores:{}};rounds.push(round);scoreRoundByDance[scoreDanceId]=round.id;save();renderScoring();return;
+  }
+  const roundDeleteButton=e.target.closest("#deleteLatestRoundBtn");
+  if(roundDeleteButton){
+    const rounds=ensureRound1(scoreDanceId);
+    if(rounds.length<=1){alert("รอบ 1 เป็นรอบหลักและไม่สามารถลบได้");return}
+    const no=rounds.length;
+    if(!confirm(`ลบรอบ ${no} และคะแนนเฉพาะรอบนี้หรือไม่? คะแนนรอบก่อนหน้าจะยังคงอยู่`))return;
+    rounds.pop();
+    scoreRoundByDance[scoreDanceId]=rounds[rounds.length-1].id;
+    save();renderScoring();
+  }
+});
+$("scoreRows").addEventListener("input",e=>{
+  if(!e.target.classList.contains("score-input"))return;const input=e.target;let raw=input.value.replace(",",".");if(raw!==input.value)input.value=raw;
+  const validText=/^\d{0,2}(?:\.\d{0,2})?$/.test(raw);const value=raw===""?null:Number(raw);const valid=validText&&(value===null||(Number.isFinite(value)&&value>=0&&value<=20));
+  input.classList.toggle("invalid",!valid);if(!valid)return;setRoundScore(currentScoreRound(),input.dataset.scoreJudge,input.dataset.scoreEntry,value);updateScoringDerived();
+});
+$("scoreRows").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.classList.contains("score-input")){e.preventDefault();if(!e.target.classList.contains("invalid"))moveScoreFocus(e.target)}});
+
+// Results and report events
+$("resultDanceSelect").addEventListener("change",e=>{resultDanceId=e.target.value;renderResults()});
+$("exportPdfBtn").addEventListener("click",()=>{$("printArea").innerHTML=buildPrintReport();setTimeout(()=>window.print(),60)});
+
+// Backup, restore, reset
+// ----- สำรองข้อมูลเป็น Excel -----
+const RESTORE_SHEET="_restore";
+function sheetFrom(rows,widths){const ws=XLSX.utils.aoa_to_sheet(rows);ws["!cols"]=widths.map(w=>({wch:w}));if(rows.length>1)ws["!autofilter"]={ref:XLSX.utils.encode_range({s:{r:0,c:0},e:{r:rows.length-1,c:rows[0].length-1}})};return ws}
+function exportExcel(){
+  if(!window.XLSX){alert("โหลดตัวสร้างไฟล์ Excel ไม่สำเร็จ กรุณาตรวจอินเทอร์เน็ตแล้วรีเฟรชหน้า");return false}
+  const wb=XLSX.utils.book_new(),colorName=id=>colorById(id).name;
+  // 1) สรุปเหรียญ
+  XLSX.utils.book_append_sheet(wb,sheetFrom([["อันดับ","สี","ทอง","เงิน","ทองแดง","รวม"],...medalStats().map((s,i)=>[i+1,s.color.name,s.gold,s.silver,s.bronze,s.gold+s.silver+s.bronze])],[8,16,8,8,10,8]),"สรุปเหรียญ");
+  // 2) ผู้ได้รับเหรียญ
+  const win=[["ลำดับจังหวะ","จังหวะ","เหรียญ","อันดับ","หมายเลข","ผู้แข่งขัน","ประเภท","สี","รอบที่ตัดสิน","คะแนนรอบตัดสิน"]];
+  state.dances.forEach((d,di)=>{const st=danceStatus(d);if(!st.final){win.push([di+1,d.name,"รอผล","","",st.reason,"","","",""]);return}winnersForDance(d.id).forEach(w=>win.push([di+1,d.name,medalLabel(w.rank).replace(/^\S+\s/,""),w.rank,w.record.reg.bib,entryLabel(w.record.reg,w.record.entry),entryTypeLabel(w.record.entry.type),colorName(w.record.reg.colorId),w.latestRound.no,totalForEntryInRound(d.id,w.latestRound,w.record.id)]))});
+  XLSX.utils.book_append_sheet(wb,sheetFrom(win,[11,22,10,8,9,40,13,12,12,15]),"ผู้ได้รับเหรียญ");
+  // 3) คะแนนละเอียดทุกกรรมการทุกรอบ
+  const det=[["ลำดับจังหวะ","จังหวะ","รอบ","ตัดสินอันดับ","หมายเลข","ผู้แข่งขัน","ประเภท","สี",...state.judges.map(j=>j.name),"รวมรอบนี้","อันดับรอบนี้","อันดับสุดท้าย","สถานะ"]];
+  state.dances.forEach((d,di)=>{const final=finalRanking(d.id);ensureRound1(d.id).forEach(round=>roundResults(d.id,round).forEach(r=>det.push([di+1,d.name,round.no,round.targetRank??"",r.record.reg.bib,entryLabel(r.record.reg,r.record.entry),entryTypeLabel(r.record.entry.type),colorName(r.record.reg.colorId),...r.scores.map(v=>v===null?"":v),r.complete?r.total:"",r.roundRank??"",final.rankMap.get(r.record.id)??"",r.complete?"ครบ":`${r.count}/${state.judges.length}`])))});
+  XLSX.utils.book_append_sheet(wb,sheetFrom(det,[11,22,6,11,9,40,13,12,...state.judges.map(j=>Math.max(10,j.name.length+2)),11,12,13,9]),"คะแนนละเอียด");
+  // 4) ผู้สมัคร
+  const {regWarnings,entryWarnings}=getValidation();
+  const reg=[["หมายเลข","สี","ชื่อผู้แข่งขันชาย","รูปแบบ","ชื่อผู้แข่งขันหญิง","จังหวะที่ลง","สถานะ"]];
+  [...allEntryRecords()].sort(sortByBib).forEach(r=>{const w=[...(regWarnings.get(r.reg.id)||[]),...(entryWarnings.get(r.id)||[])];reg.push([r.reg.bib,colorName(r.reg.colorId),r.entry.type==="solo_f"?"":r.reg.maleName,entryTypeLabel(r.entry.type),r.entry.type==="solo_m"?"":r.entry.femaleName,state.dances.filter(d=>r.entry.dances.includes(d.id)).map(d=>d.name).join(", "),w.length?w.join("; "):"พร้อม"])});
+  XLSX.utils.book_append_sheet(wb,sheetFrom(reg,[9,12,28,13,28,40,30]),"ผู้สมัคร");
+  // 5) ข้อมูลการแข่งขัน
+  const info=[["หัวข้อ","ข้อมูล"],["ชื่อรายการ",state.event.name],["วันที่",state.event.date],["สถานที่",state.event.location],["สำรองเมื่อ",new Date().toLocaleString("th-TH")],["รายการออนไลน์",cloudEvent?`${cloudEvent.title} (${cloudEvent.code})`:"ไม่ได้เชื่อมต่อ"],[],["กรรมการ",""],...state.judges.map((j,i)=>[`กรรมการ ${i+1}`,j.name]),[],["จังหวะ",""],...state.dances.map((d,i)=>[`จังหวะ ${i+1}`,d.name]),[],["สี",""],...state.colors.map((c,i)=>[`สี ${i+1}`,c.name])];
+  const wsInfo=XLSX.utils.aoa_to_sheet(info);wsInfo["!cols"]=[{wch:18},{wch:45}];XLSX.utils.book_append_sheet(wb,wsInfo,"ข้อมูลการแข่งขัน");
+  // 6) ข้อมูลสำหรับนำกลับเข้าโปรแกรม (ซ่อนไว้)
+  const json=JSON.stringify(state),chunks=[["ข้อมูลสำหรับนำเข้าโปรแกรม – ห้ามแก้ไขชีตนี้"]];for(let i=0;i<json.length;i+=30000)chunks.push([json.slice(i,i+30000)]);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(chunks),RESTORE_SHEET);
+  wb.Workbook={Sheets:wb.SheetNames.map(n=>({name:n,Hidden:n===RESTORE_SHEET?1:0}))};
+  const stamp=new Date().toLocaleString("sv-SE").slice(0,16).replace(/[-: ]/g,"");
+  XLSX.writeFile(wb,`${safeFilename()}_สำรอง_${stamp}.xlsx`,{compression:true});
+  return true;
+}
+async function readBackupFile(file){
+  if(!/\.xlsx$/i.test(file.name))throw new Error("กรุณาเลือกไฟล์ Excel (.xlsx) ที่สำรองจากโปรแกรมนี้");
+  {
+    if(!window.XLSX)throw new Error("โหลดตัวอ่านไฟล์ Excel ไม่สำเร็จ กรุณาตรวจอินเทอร์เน็ตแล้วรีเฟรชหน้า");
+    const wb=XLSX.read(await file.arrayBuffer(),{type:"array"});const ws=wb.Sheets[RESTORE_SHEET];
+    if(!ws)throw new Error("ไฟล์ Excel นี้ไม่ใช่ไฟล์สำรองจากโปรแกรมนี้ (ไม่พบข้อมูลสำหรับนำเข้า)");
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true});
+    return normalizeState(JSON.parse(rows.slice(1).map(r=>String(r[0]??"")).join("")));
+  }
+}
+$("backupBtn").addEventListener("click",()=>{try{exportExcel()}catch(e){alert("สร้างไฟล์ Excel ไม่สำเร็จ: "+(e.message||e))}});
+$("restoreBtn").addEventListener("click",()=>$("restoreFile").click());
+$("restoreFile").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;try{const incoming=await readBackupFile(file);if(!confirm("นำเข้าข้อมูลและแทนที่ข้อมูลปัจจุบันหรือไม่?"))return;state=incoming;state.colors=ensureSevenColors(state.colors);scoreDanceId=resultDanceId=state.dances[0].id;scoreRoundByDance={};save();switchTab("setup");alert("นำเข้าข้อมูลเรียบร้อยแล้ว")}catch(err){alert(err.message||"ไม่สามารถอ่านไฟล์ได้")}finally{e.target.value=""}});
+
+// ===================== ระบบออนไลน์ (Supabase) =====================
+const SB_URL="https://cmblvwteompumjzrqpcv.supabase.co";
+const SB_KEY="sb_publishable_Dd_l4sYnxwOwTOYHCXMbgQ_9wR7vxt9";
+const CLOUD_EVENT_KEY="siriraj-dancesport-cloud-event";
+let sb=null,cloudUser=null,cloudEvent=null,cloudTimer=null,cloudBusy=false,cloudDirty=false,applyingCloud=false,cloudConflictOpen=false,cloudPollTimer=null;
+const clock=()=>new Date().toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+function getSb(){if(sb)return sb;if(!window.supabase?.createClient)throw new Error("โหลดระบบออนไลน์ไม่สำเร็จ กรุณาตรวจอินเทอร์เน็ตแล้วรีเฟรชหน้า");sb=window.supabase.createClient(SB_URL,SB_KEY);return sb}
+function cloudStatus(text,kind){const mini=$("cloudStatusMini");mini.textContent=text;mini.title=text;mini.className="side-status "+(kind||"")}
+function linkedEventId(){try{return localStorage.getItem(CLOUD_EVENT_KEY)||""}catch{return ""}}
+function captureFocus(){const a=document.activeElement;if(!a||!a.matches?.("main input,main select"))return null;if(a.id)return "#"+CSS.escape(a.id);const attrs=[...a.attributes].filter(x=>x.name.startsWith("data-")).map(x=>`[${x.name}="${CSS.escape(x.value)}"]`).join("");return attrs?a.tagName.toLowerCase()+attrs:null}
+function restoreFocus(sel){if(!sel)return;const el=document.querySelector(sel);if(el){el.focus();if(el.select&&el.classList.contains("score-input"))el.select()}}
+
+function cloudSchedule(){if(applyingCloud||!cloudUser||!cloudEvent)return;cloudDirty=true;cloudStatus("รอบันทึกออนไลน์…","warn");clearTimeout(cloudTimer);cloudTimer=setTimeout(cloudFlush,800)}
+async function cloudFlush(){
+  cloudTimer=null;
+  if(!cloudDirty||!cloudEvent||!cloudUser)return true;
+  if(cloudBusy||cloudConflictOpen){cloudTimer=setTimeout(cloudFlush,400);return false}
+  cloudBusy=true;cloudDirty=false;
+  const ev=cloudEvent,snapshot=JSON.parse(JSON.stringify(state)),next=ev.rev+1;
+  try{
+    const {data,error}=await getSb().from("dancesport_events").update({draft:snapshot,title:snapshot.event.name||ev.title,rev:next,updated_at:new Date().toISOString()}).eq("id",ev.id).eq("rev",ev.rev).select("rev");
+    if(error)throw error;
+    if(!data||!data.length){cloudDirty=true;cloudBusy=false;await cloudConflict();return false}
+    ev.rev=next;if(snapshot.event.name&&snapshot.event.name!==ev.title){ev.title=snapshot.event.name;const o=$("cloudEventSelect").querySelector(`option[value="${CSS.escape(ev.id)}"]`);if(o)o.textContent=`${ev.title} (${ev.code})`}cloudStatus("บันทึกออนไลน์แล้ว "+clock(),"ok");schedulePublish();return true;
+  }catch(e){
+    cloudDirty=true;cloudStatus("บันทึกออนไลน์ไม่สำเร็จ – จะลองใหม่อัตโนมัติ ("+(e.message||e)+")","error");
+    clearTimeout(cloudTimer);cloudTimer=setTimeout(cloudFlush,5000);return false;
+  }finally{cloudBusy=false}
+}
+async function cloudConflict(){
+  if(cloudConflictOpen||!cloudEvent)return;cloudConflictOpen=true;
+  try{
+    const r=await getSb().from("dancesport_events").select("rev").eq("id",cloudEvent.id).maybeSingle();
+    if(r.error)throw r.error;
+    if(!r.data){cloudStatus("หมดเวลาเข้าสู่ระบบ กรุณาเข้าสู่ระบบใหม่","error");alert("การเข้าสู่ระบบหมดอายุ กรุณาออกจากระบบแล้วเข้าสู่ระบบใหม่ (ข้อมูลยังอยู่ในเครื่องนี้)");return}
+    const useCloud=confirm("มีเครื่องอื่นบันทึกข้อมูลรายการนี้ในช่วงเวลาเดียวกัน\n\nกด OK = โหลดข้อมูลล่าสุดจากออนไลน์ (การแก้ไขล่าสุดของเครื่องนี้จะหายไป)\nกด Cancel = ใช้ข้อมูลของเครื่องนี้บันทึกทับข้อมูลออนไลน์");
+    if(useCloud){cloudDirty=false;await cloudLoad(cloudEvent.id,{silent:true})}
+    else{cloudEvent.rev=r.data.rev;cloudDirty=true;setTimeout(cloudFlush,0)}
+  }catch(e){cloudStatus("ตรวจสอบข้อมูลออนไลน์ไม่สำเร็จ: "+(e.message||e),"error");cloudTimer=setTimeout(cloudFlush,5000)}
+  finally{cloudConflictOpen=false}
+}
+function applyCloudDraft(draft){
+  const sel=captureFocus();applyingCloud=true;
+  try{
+    state=normalizeState(draft);state.colors=ensureSevenColors(state.colors);
+    try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}
+    if(!state.dances.some(d=>d.id===scoreDanceId))scoreDanceId=state.dances[0].id;
+    if(!state.dances.some(d=>d.id===resultDanceId))resultDanceId=state.dances[0].id;
+    switchTab(currentTab);
+  }finally{applyingCloud=false}
+  restoreFocus(sel);
+}
+async function cloudList(){
+  const {data,error}=await getSb().from("dancesport_events").select("id,code,title,created_at").order("created_at",{ascending:false});
+  if(error)throw error;
+  $("cloudEventSelect").innerHTML='<option value="">— เลือกรายการแข่งขัน —</option>'+data.map(x=>`<option value="${escapeHTML(x.id)}">${escapeHTML(x.title)} (${escapeHTML(x.code)})</option>`).join("");
+  if(cloudEvent)$("cloudEventSelect").value=cloudEvent.id;
+  return data;
+}
+async function cloudLoad(id,opts={}){
+  if(!opts.silent&&id!==linkedEventId()&&state.registrations.length){
+    if(!confirm("ข้อมูลในเครื่องนี้จะถูกแทนที่ด้วยข้อมูลของรายการออนไลน์ที่เลือก\nระบบจะดาวน์โหลดไฟล์สำรอง Excel ของข้อมูลในเครื่องให้ก่อน\n\nดำเนินการต่อหรือไม่?")){$("cloudEventSelect").value=cloudEvent?.id||"";return}
+    let backedUp=false;try{backedUp=exportExcel()}catch(e){}
+    if(!backedUp&&!confirm("สำรองไฟล์ Excel ไม่สำเร็จ ต้องการดำเนินการต่อโดยไม่สำรองหรือไม่?")){$("cloudEventSelect").value=cloudEvent?.id||"";return}
+  }
+  cloudStatus("กำลังโหลดข้อมูลออนไลน์…","warn");
+  const {data,error}=await getSb().from("dancesport_events").select("id,code,title,draft,rev").eq("id",id).single();
+  if(error)throw error;
+  cloudEvent={id:data.id,code:data.code,title:data.title,rev:data.rev||0};
+  try{localStorage.setItem(CLOUD_EVENT_KEY,data.id)}catch(e){}
+  $("cloudEventSelect").value=data.id;
+  if(data.draft&&data.draft.version){applyCloudDraft(data.draft);cloudDirty=false;cloudStatus(`เชื่อมต่อออนไลน์ • ${data.code} • ${clock()}`,"ok")}
+  else{cloudDirty=true;await cloudFlush()}
+  renderMcLink();
+  try{const pr=await getSb().from("dancesport_public_results").select("published").eq("code",data.code).maybeSingle();lastPublishedSig=pr.data?.published?publishSig(data.code,pr.data.published):""}catch(e){lastPublishedSig=""}
+  schedulePublish(300);
+}
+async function cloudPoll(){
+  if(!cloudUser||!cloudEvent||cloudBusy||cloudDirty||cloudConflictOpen)return;
+  try{
+    const {data,error}=await getSb().from("dancesport_events").select("rev").eq("id",cloudEvent.id).maybeSingle();
+    if(error||!data)return;
+    if(data.rev>cloudEvent.rev&&!cloudDirty&&!cloudBusy){await cloudLoad(cloudEvent.id,{silent:true});cloudStatus("อัปเดตข้อมูลจากเครื่องอื่นแล้ว "+clock(),"ok")}
+  }catch(e){}
+}
+async function cloudAfterLogin(user){
+  cloudUser=user;$("cloudLogin").classList.add("hidden");$("cloudApp").classList.remove("hidden");$("menuUser").classList.remove("hidden");
+  $("cloudUserEmail").textContent="เข้าสู่ระบบเป็น "+(user.email||"Staff");$("gateUser").textContent="เข้าสู่ระบบเป็น "+(user.email||"Staff");
+  const rows=await cloudList();const linked=rows.find(r=>r.id===linkedEventId());
+  clearInterval(cloudPollTimer);cloudPollTimer=setInterval(cloudPoll,5000);
+  if(linked){await cloudLoad(linked.id,{silent:true});hideGate()}
+  else{renderGateEvents(rows);showGate("events");cloudStatus("เข้าสู่ระบบแล้ว – เลือกรายการแข่งขัน","warn")}
+}
+// ----- หน้าเข้าสู่ระบบ (หน้าแรก) -----
+function showGate(step){document.body.classList.add("gate-open");$("gateLogin").classList.toggle("hidden",step!=="login");$("gateEvents").classList.toggle("hidden",step!=="events");if(step==="login")setTimeout(()=>$("gateEmail").focus(),50)}
+function hideGate(){document.body.classList.remove("gate-open");window.scrollTo({top:0})}
+function renderGateEvents(rows){
+  $("gateEventList").innerHTML=rows.length?rows.map(r=>`<button class="gate-event" data-gate-event="${escapeHTML(r.id)}"><b>${escapeHTML(r.title)}</b><span>รหัสจอพิธีกร ${escapeHTML(r.code)} • สร้างเมื่อ ${escapeHTML(new Date(r.created_at).toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"}))}</span></button>`).join(""):'<div class="hint">ยังไม่มีรายการแข่งขัน กดปุ่มด้านล่างเพื่อสร้างรายการแรก</div>';
+}
+function renderMcLink(){
+  const box=$("mcLinkBox");$("menuDanger").classList.toggle("hidden",!cloudEvent);if(!cloudEvent){box.innerHTML="";return}
+  const base=location.href.split(/[?#]/)[0],url=base+"?mc="+encodeURIComponent(cloudEvent.code),local=location.protocol==="file:";
+  box.innerHTML=`<div class="side-mc"><div>📺 จอพิธีกร • รหัส <b>${escapeHTML(cloudEvent.code)}</b></div><div id="mcPublishInfo" class="hint">กำลังอัปเดตจอพิธีกร…</div><div class="button-row"><button class="btn small" id="copyMcLinkBtn" data-url="${escapeHTML(url)}">คัดลอกลิงก์</button><a class="btn small" href="${escapeHTML(url)}" target="_blank" rel="noopener">เปิดดู</a></div>${local?'<div class="hint warn-text">เปิดจากไฟล์ในเครื่อง: iPad ยังเปิดลิงก์นี้ไม่ได้ ต้องนำไฟล์ขึ้นเว็บก่อน</div>':""}</div>`;
+}
+// ----- เผยแพร่ผลขึ้นจอพิธีกรอัตโนมัติ (เฉพาะจังหวะที่ผลสมบูรณ์) -----
+let publishTimer=null,lastPublishedSig="";
+const stableStr=v=>Array.isArray(v)?"["+v.map(stableStr).join(",")+"]":v&&typeof v==="object"?"{"+Object.keys(v).sort().map(k=>JSON.stringify(k)+":"+stableStr(v[k])).join(",")+"}":JSON.stringify(v??null);
+function publishSig(code,p){const {at,...rest}=p||{};return code+"|"+stableStr(rest)}
+function updatePublishInfo(p,note){const el=$("mcPublishInfo");if(!el)return;const n=p.dances.filter(d=>d.final).length;el.textContent=`ประกาศผลแล้ว ${n}/${p.dances.length} จังหวะ`+(note?` • ${note}`:"");el.className="hint"}
+function schedulePublish(delay=3000){if(!cloudUser||!cloudEvent)return;clearTimeout(publishTimer);publishTimer=setTimeout(publishNow,delay)}
+async function publishNow(){
+  publishTimer=null;if(!cloudUser||!cloudEvent)return;
+  const p=publicPayload(),code=cloudEvent.code,sig=publishSig(code,p);
+  if(sig===lastPublishedSig){updatePublishInfo(p);return}
+  try{
+    const {error}=await getSb().from("dancesport_public_results").upsert({code,published:p,published_at:p.at});
+    if(error)throw error;
+    lastPublishedSig=sig;updatePublishInfo(p,"อัปเดต "+clock());
+  }catch(e){const el=$("mcPublishInfo");if(el){el.textContent="อัปเดตจอพิธีกรไม่สำเร็จ – จะลองใหม่";el.className="hint error-text"}publishTimer=setTimeout(publishNow,8000)}
+}
+function danceStatus(d){
+  if(!validEntriesForDance(d.id).length)return {final:false,reason:"ยังไม่มีผู้แข่งขันที่ข้อมูลครบ"};
+  const r=finalRanking(d.id);
+  if(r.incompleteIds.length)return {final:false,reason:`คะแนนรอบ 1 ยังไม่ครบ ${r.incompleteIds.length} รายการ`};
+  if(r.groups.some(g=>g.ids.length>1&&g.rankStart<=3))return {final:false,reason:"มีคะแนนเสมอในอันดับ 1–3 ต้องจัดรอบตัดสินให้เสร็จก่อน"};
+  return {final:true,reason:""};
+}
+function publicPayload(){
+  const dances=state.dances.map(d=>{
+    const st=danceStatus(d);
+    const winners=st.final?winnersForDance(d.id).map(w=>{const c=colorById(w.record.reg.colorId);return {rank:w.rank,bib:w.record.reg.bib,name:entryLabel(w.record.reg,w.record.entry),color:c.name,hex:c.hex,round:w.latestRound.no}}):[];
+    return {name:d.name,final:st.final,reason:st.reason,winners};
+  });
+  const medals=medalStats().map(m=>({name:m.color.name,hex:m.color.hex,gold:m.gold,silver:m.silver,bronze:m.bronze}));
+  return {title:state.event.name,date:state.event.date,location:state.event.location,at:new Date().toISOString(),dances,medals};
+}
+
+$("gateLoginBtn").addEventListener("click",async()=>{
+  const btn=$("gateLoginBtn"),msg=$("gateMsg"),email=$("gateEmail").value.trim(),pw=$("gatePassword").value;
+  if(!email||!pw){msg.textContent="กรุณากรอกอีเมลและรหัสผ่าน";return}
+  btn.disabled=true;btn.textContent="กำลังเข้าสู่ระบบ…";msg.textContent="";
+  try{const {data,error}=await getSb().auth.signInWithPassword({email,password:pw});if(error)throw error;$("gatePassword").value="";await cloudAfterLogin(data.user)}
+  catch(e){msg.textContent=e.message==="Invalid login credentials"?"อีเมลหรือรหัสผ่านไม่ถูกต้อง":(e.message||String(e))}
+  finally{btn.disabled=false;btn.textContent="เข้าสู่ระบบ"}
+});
+$("gatePassword").addEventListener("keydown",e=>{if(e.key==="Enter")$("gateLoginBtn").click()});
+$("gateEmail").addEventListener("keydown",e=>{if(e.key==="Enter")$("gatePassword").focus()});
+$("gateEventList").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-gate-event]");if(!b)return;const id=b.dataset.gateEvent;
+  try{await cloudLoad(id);if(cloudEvent?.id===id){hideGate();switchTab("setup")}}catch(err){$("gateMsg").textContent="";alert("โหลดรายการไม่สำเร็จ: "+(err.message||err))}
+});
+$("gateNewBtn").addEventListener("click",async()=>{if(await createEventFlow())hideGate()});
+$("gateOffline").addEventListener("click",e=>{e.preventDefault();hideGate();cloudStatus("ใช้งานในเครื่องชั่วคราว – ข้อมูลยังไม่ได้บันทึกออนไลน์","warn")});
+$("openGateBtn").addEventListener("click",()=>showGate("login"));
+function setMenu(open){$("menuPanel").classList.toggle("hidden",!open);$("menuBtn").setAttribute("aria-expanded",open)}
+$("menuBtn").addEventListener("click",e=>{e.stopPropagation();setMenu($("menuPanel").classList.contains("hidden"))});
+document.addEventListener("click",e=>{if(!e.target.closest(".menu-wrap"))setMenu(false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")setMenu(false)});
+$("menuPanel").addEventListener("click",e=>{if(e.target.closest("#newEventBtn,#backupBtn,#restoreBtn,#cloudLogoutBtn,#deleteEventBtn"))setMenu(false)});
+$("cloudLogoutBtn").addEventListener("click",async()=>{
+  if(cloudDirty&&!(await cloudFlush())&&!confirm("ยังบันทึกออนไลน์ไม่สำเร็จ ออกจากระบบต่อหรือไม่? (ข้อมูลยังอยู่ในเครื่องนี้)"))return;
+  try{await getSb().auth.signOut()}catch(e){}
+  clearInterval(cloudPollTimer);clearTimeout(publishTimer);cloudUser=null;cloudEvent=null;cloudDirty=false;lastPublishedSig="";
+  $("cloudApp").classList.add("hidden");$("menuUser").classList.add("hidden");$("cloudLogin").classList.remove("hidden");$("mcLinkBox").innerHTML="";
+  cloudStatus("ยังไม่เข้าสู่ระบบ – ข้อมูลอยู่ในเครื่องนี้เท่านั้น","");showGate("login");
+});
+$("cloudEventSelect").addEventListener("change",async e=>{
+  const id=e.target.value;if(!id||id===cloudEvent?.id)return;
+  try{if(cloudDirty)await cloudFlush();await cloudLoad(id)}catch(err){alert("โหลดรายการไม่สำเร็จ: "+(err.message||err))}
+});
+$("newEventBtn").addEventListener("click",()=>createEventFlow());
+$("deleteEventBtn").addEventListener("click",async()=>{
+  if(!cloudUser||!cloudEvent)return alert("ต้องเข้าสู่ระบบและเลือกรายการแข่งขันก่อน");
+  const ev={...cloudEvent};
+  const typed=prompt(`ลบรายการ “${ev.title}” ถาวร?\n\n• ผู้สมัครและคะแนนทั้งหมดของรายการนี้จะหายจากระบบออนไลน์\n• จอพิธีกรรหัส ${ev.code} จะไม่แสดงผลอีก\n• ระบบจะดาวน์โหลดไฟล์สำรอง Excel ให้ก่อน (นำกลับเข้ามาได้)\n\nพิมพ์รหัส ${ev.code} เพื่อยืนยันการลบ:`);
+  if(typed===null)return;
+  if(typed.trim().toUpperCase()!==ev.code)return alert("รหัสไม่ตรง – ยกเลิกการลบ");
+  try{
+    if(cloudDirty)await cloudFlush();
+    let backedUp=false;try{backedUp=exportExcel()}catch(e){}
+    if(!backedUp&&!confirm("สำรองไฟล์ Excel ไม่สำเร็จ ต้องการลบต่อโดยไม่มีไฟล์สำรองหรือไม่?"))return;
+    clearTimeout(publishTimer);clearTimeout(cloudTimer);cloudDirty=false;
+    const del=await getSb().from("dancesport_events").delete().eq("id",ev.id).select("id");
+    if(del.error)throw del.error;
+    if(!del.data||!del.data.length)throw new Error("ไม่พบรายการนี้ หรือไม่มีสิทธิ์ลบ");
+    await getSb().from("dancesport_public_results").delete().eq("code",ev.code);
+    cloudEvent=null;lastPublishedSig="";
+    try{localStorage.removeItem(CLOUD_EVENT_KEY)}catch(e){}
+    applyingCloud=true;try{state=initialState();try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}scoreDanceId=resultDanceId=state.dances[0].id;scoreRoundByDance={};switchTab("setup")}finally{applyingCloud=false}
+    renderMcLink();
+    const rows=await cloudList();renderGateEvents(rows);showGate("events");
+    cloudStatus("ลบรายการแล้ว – เลือกหรือสร้างรายการใหม่","warn");
+    alert(`ลบรายการ “${ev.title}” เรียบร้อยแล้ว`);
+  }catch(e){alert("ลบไม่สำเร็จ: "+(e.message||e))}
+});
+async function createEventFlow(){
+  let created=false;
+  try{
+    if(!cloudUser){
+      if(!confirm("เริ่มรายการแข่งขันใหม่ในเครื่องนี้?\nข้อมูลปัจจุบันจะถูกล้าง (ระบบจะสำรองเป็นไฟล์ Excel ให้ก่อน)\n\nหากต้องการเก็บข้อมูลออนไลน์ ให้เข้าสู่ระบบก่อน"))return;
+      if(state.registrations.length){let ok=false;try{ok=exportExcel()}catch(e){}if(!ok&&!confirm("สำรอง Excel ไม่สำเร็จ ล้างข้อมูลต่อหรือไม่?"))return}
+      state=initialState();scoreDanceId=resultDanceId=state.dances[0].id;scoreRoundByDance={};save();switchTab("setup");return;
+    }
+    const fromLocal=!cloudEvent&&state.registrations.length>0;
+    const name=(prompt(fromLocal?`สร้างรายการออนไลน์จากข้อมูลที่อยู่ในเครื่องนี้ (${state.registrations.length} หมายเลข)\n\nชื่อรายการแข่งขัน:`:"สร้างรายการแข่งขันใหม่แบบเริ่มจากว่าง\n(รายการเดิมยังเก็บไว้ออนไลน์ เลือกกลับมาได้)\n\nชื่อรายการแข่งขัน:",fromLocal?state.event.name:"การแข่งขันลีลาศกีฬาสีศิริราช")||"").trim();
+    if(!name)return;
+    const code=(prompt("ตั้งรหัสจอพิธีกร (ตัวอังกฤษ/ตัวเลข 4–20 ตัว) เช่น SIR2026")||"").trim().toUpperCase();
+    if(!/^[A-Z0-9_-]{4,20}$/.test(code))return alert("รหัสต้องเป็นตัวอังกฤษหรือตัวเลข 4–20 ตัว");
+    if(cloudDirty)await cloudFlush();
+    const draft=fromLocal?JSON.parse(JSON.stringify(state)):initialState();draft.event.name=name;
+    const {data,error}=await getSb().from("dancesport_events").insert({title:name,code,draft,rev:0}).select("id").single();
+    if(error)throw error;
+    try{localStorage.setItem(CLOUD_EVENT_KEY,data.id)}catch(e){}
+    await cloudList();await cloudLoad(data.id,{silent:true});switchTab("setup");
+    created=true;alert(`สร้างรายการ “${name}” แล้ว\nรหัสจอพิธีกร: ${code}`);
+  }catch(e){alert("สร้างรายการไม่สำเร็จ: "+(e.code==="23505"?"รหัสนี้ถูกใช้แล้ว กรุณาตั้งรหัสใหม่":e.message||e))}
+  return created;
+}
+$("mcLinkBox").addEventListener("click",async e=>{
+  if(e.target.id!=="copyMcLinkBtn")return;
+  const text=e.target.dataset.url;
+  try{await navigator.clipboard.writeText(text);e.target.textContent="คัดลอกแล้ว ✓"}catch(err){prompt("คัดลอกลิงก์นี้",text)}
+  setTimeout(()=>{if(e.target.isConnected)e.target.textContent="คัดลอกลิงก์"},1800);
+});
+window.addEventListener("beforeunload",e=>{if(cloudDirty){cloudFlush();e.preventDefault();e.returnValue=""}});
+
+// ===================== จอพิธีกร (iPad) =====================
+let mcCode="",mcTimer=null,mcLastAt=null,mcPayload=null,mcError="",mcCheckedAt="";
+const hexOk=h=>/^#[0-9a-f]{6}$/i.test(h||"")?h:"#888888";
+function startMC(code){
+  document.body.classList.remove("gate-open");document.body.classList.add("mc-mode");$("mcView").classList.remove("hidden");
+  code=String(code||"").trim().toUpperCase();
+  if(!code){$("mcView").innerHTML=`<div class="mc-code"><div style="flex-basis:100%"><h2>จอพิธีกร</h2><div class="hint">ใส่รหัสการแข่งขันที่ Staff แจ้ง</div></div><input id="mcCodeInput" placeholder="เช่น SIR2026" style="flex:1" autocapitalize="characters"><button class="btn primary" id="mcCodeGo">เปิดผล</button></div>`;return}
+  mcCode=code;try{history.replaceState(null,"",location.pathname+"?mc="+encodeURIComponent(code))}catch(e){}
+  renderMC();mcPoll();clearInterval(mcTimer);mcTimer=setInterval(mcPoll,3000);
+}
+let mcPage=0;
+const MEDAL_ICON=["","🥇","🥈","🥉"],MEDAL_NAME=["","เหรียญทอง","เหรียญเงิน","เหรียญทองแดง"];
+function mcPages(p){return [...(p.dances||[]).map((d,i)=>({type:"dance",d,i})),{type:"medals"}]}
+function mcDanceHTML(d,i,n){
+  const head=`<div class="mc-count">จังหวะที่ ${i+1} จาก ${n}</div><h1 class="mc-title">${escapeHTML(d.name)}</h1>`;
+  if(!d.final)return head+'<div class="mc-wait">⏳ รอผล<small>ผลจะขึ้นเองเมื่อ Staff กรอกคะแนนครบ</small></div>';
+  const rows=(d.winners||[]).map(w=>{const r=Number(w.rank),hex=hexOk(w.hex);return `<div class="mc-item" style="--c:${hex}"><div class="mc-medal-big">${MEDAL_ICON[r]||""}</div><div class="mc-num">${escapeHTML(w.bib)}</div><div class="mc-who">${escapeHTML(w.name)}<small><span class="mc-tag">สี${escapeHTML(w.color)}</span>${MEDAL_NAME[r]||""}</small></div></div>`}).join("");
+  return head+`<div class="mc-list">${rows}</div>`;
+}
+function mcMedalsHTML(p){
+  const n=(p.dances||[]).filter(d=>d.final).length;
+  const rows=(p.medals||[]).map((m,i)=>`<tr><td class="n">${i+1}</td><td><span class="mc-sw" style="background:${hexOk(m.hex)}"></span>${escapeHTML(m.name)}</td><td class="n">${Number(m.gold)||0}</td><td class="n">${Number(m.silver)||0}</td><td class="n">${Number(m.bronze)||0}</td></tr>`).join("");
+  return `<div class="mc-count">ประกาศผลแล้ว ${n} จาก ${(p.dances||[]).length} จังหวะ</div><h1 class="mc-title">สรุปเหรียญรายสี</h1><div class="scroll" style="border:0;border-radius:18px"><table class="mc-table"><thead><tr><th class="n">อันดับ</th><th>สี</th><th class="n">🥇 ทอง</th><th class="n">🥈 เงิน</th><th class="n">🥉 ทองแดง</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function mcFootUpdate(){
+  const f=$("mcFoot");if(!f)return;
+  f.className="mc-live"+(mcError?" err":"");
+  f.textContent=mcError?"เชื่อมต่อไม่ได้ – กำลังลองใหม่":`อัปเดตอัตโนมัติ${mcCheckedAt?" • "+mcCheckedAt:""}`;
+}
+function renderMC(){
+  const v=$("mcView"),p=mcPayload;
+  const bar=`<div class="mc-bar"><b>${escapeHTML(p?.title||"จอพิธีกร")}</b><span class="mc-live" id="mcFoot"></span></div>`;
+  if(!p){v.innerHTML=bar+`<div class="mc-main"><div class="mc-wait">รอผลการแข่งขัน<small>รหัส ${escapeHTML(mcCode)} • ผลจะขึ้นเองเมื่อ Staff เริ่มบันทึก</small></div></div>`;mcFootUpdate();return}
+  const pages=mcPages(p);mcPage=Math.max(0,Math.min(mcPage,pages.length-1));const cur=pages[mcPage];
+  const body=cur.type==="dance"?mcDanceHTML(cur.d,cur.i,p.dances.length):mcMedalsHTML(p);
+  const dots=pages.map((x,i)=>`<span class="mc-dot${x.type==="dance"&&x.d.final?" done":""}${i===mcPage?" on":""}"></span>`).join("");
+  const last=pages.length-1;
+  v.innerHTML=bar+`<div class="mc-main">${body}</div><div class="mc-nav"><button class="mc-btn" data-mc-nav="-1" ${mcPage===0?"disabled":""}>◀ ก่อนหน้า</button><div class="mc-dots">${dots}</div><button class="mc-btn next" data-mc-nav="1" ${mcPage===last?"disabled":""}>${mcPage===last-1?"สรุปเหรียญ ▶":"ถัดไป ▶"}</button></div>`;
+  mcFootUpdate();
+}
+function mcGo(step){if(!mcPayload)return;const n=mcPages(mcPayload).length;const next=Math.max(0,Math.min(n-1,mcPage+step));if(next!==mcPage){mcPage=next;renderMC();window.scrollTo({top:0})}}
+async function mcPoll(){
+  if(!mcCode)return;
+  try{
+    const {data,error}=await getSb().from("dancesport_public_results").select("published,published_at").eq("code",mcCode).maybeSingle();
+    if(error)throw error;
+    mcError="";mcCheckedAt=clock();const at=data?.published_at||"";
+    if(at!==mcLastAt){mcLastAt=at;mcPayload=data?.published||null;renderMC()}else mcFootUpdate();
+  }catch(e){mcError=e.message||String(e);mcFootUpdate()}
+}
+$("mcView").addEventListener("click",e=>{
+  const t=e.target.closest("[data-mc-nav]");if(t){mcGo(Number(t.dataset.mcNav));return}
+  if(e.target.id==="mcCodeGo")startMC($("mcCodeInput").value);
+});
+$("mcView").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="mcCodeInput")startMC(e.target.value)});
+document.addEventListener("keydown",e=>{if(!document.body.classList.contains("mc-mode")||e.target.matches?.("input"))return;if(e.key==="ArrowRight")mcGo(1);if(e.key==="ArrowLeft")mcGo(-1)});
+let mcTouchX=null;
+$("mcView").addEventListener("touchstart",e=>{mcTouchX=e.touches[0].clientX},{passive:true});
+$("mcView").addEventListener("touchend",e=>{if(mcTouchX===null)return;const dx=e.changedTouches[0].clientX-mcTouchX;mcTouchX=null;if(Math.abs(dx)>70)mcGo(dx<0?1:-1)},{passive:true});
+
+// ===================== เริ่มต้น =====================
+renderSetup();
+const mcParam=new URLSearchParams(location.search).get("mc");
+if(mcParam!==null||/^#mc/i.test(location.hash)){startMC(mcParam||location.hash.replace(/^#mc[-=]?/i,""))}
+else{
+  showGate("login");
+  (async()=>{try{const {data}=await getSb().auth.getSession();if(data?.session?.user)await cloudAfterLogin(data.session.user)}catch(e){$("gateMsg").textContent=(e.message||String(e))+" – ถ้าไม่มีอินเทอร์เน็ต กดลิงก์ “ใช้งานในเครื่องนี้ชั่วคราว” ด้านล่าง"}})();
+}
+})();
+</script>
+</body>
+</html>
